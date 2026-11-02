@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16211B">
+<meta name="description" content="田园竹坝 · 南洋风情田园文旅综合体前期策划演示站。内容整理自《厦门田园竹坝项目前期策划书》，含市场分析、规划设计、运营模式、营销策略、投资分析与实施计划。">
+<title>田园竹坝 · 南洋风情田园文旅综合体 | 前期策划演示站</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2316211B'/><path d='M7 23c0-8 5.4-13.4 14.4-14.4C21.4 17 15.8 22.6 8 22.6H7z' fill='%23C89B3C'/></svg>">
+<style>
+/* =====================================================================
+   田园竹坝 · 文旅策划演示站
+   单文件静态站点：零外部依赖，双击即可运行，可直接托管至 GitHub Pages
+   ---------------------------------------------------------------------
+   灰度三级对比设计（整站去色后仍保留三个明暗层级，保证层级与可读性）：
+     L1 暗  #16211B  首屏 / 页脚 / 联系区 / 主文字 / 主按钮   → 灰度 ≈ 22
+     L2 中  #2F6B4A / #C05A2E  强调块 / 徽章 / 图标 / 条形图  → 灰度 ≈ 100–126
+     L3 亮  #F6F3EC / #FFFFFF  页面底色 / 卡片               → 灰度 ≈ 237–255
+   视觉约定：实色块、清晰排版、合理留白；不使用毛玻璃 / 背景模糊效果。
+   兼容：桌面 Chrome/Edge/Firefox/Safari、iOS Safari 12+、Android Chrome。
+   ===================================================================== */
+
+/* ============ 1. 设计令牌 ============ */
+:root{
+  /* 色彩 —— 灰度三级 */
+  --c-ink:      #16211B;   /* L1 主暗色 */
+  --c-ink-2:    #1E2C24;   /* L1 变体（暗底卡片/输入框） */
+  --c-ink-3:    #101814;   /* L1 页脚加深 */
+  --c-forest:   #2F6B4A;   /* L2 品牌绿 */
+  --c-terra:    #C05A2E;   /* L2 赤陶橙 */
+  --c-gold:     #C89B3C;   /* L2 点缀金 */
+  --c-paper:    #F6F3EC;   /* L3 页面底色 */
+  --c-paper-2:  #F0ECE1;   /* L3 间隔底色 */
+  --c-card:     #FFFFFF;   /* L3 卡片 */
+  --c-line:     #E3DED2;   /* 分隔线 */
+  --c-line-2:   #D5CEBD;   /* 分隔线（强） */
+  --c-text:     #22302A;   /* 正文 */
+  --c-text-2:   #5C6B62;   /* 次要文字 */
+  --c-text-3:   #8A968E;   /* 辅助文字 */
+  --c-on-dark:  rgba(246,243,236,.74); /* 暗底次要文字 */
+  --line-dark:  rgba(246,243,236,.16); /* 暗底分隔线 */
+
+  /* 字体 */
+  --f-serif: "Noto Serif SC","Source Han Serif SC","Songti SC","STSong","SimSun",serif;
+  --f-sans:  -apple-system,BlinkMacSystemFont,"HarmonyOS Sans SC","PingFang SC","MiSans","Microsoft YaHei","Noto Sans SC","Source Han Sans SC",sans-serif;
+
+  /* 尺寸 */
+  --w-max: 1200px;
+  --nav-h: 68px;
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+
+  /* 阴影（轻量投影，非模糊叠加） */
+  --sh-1: 0 1px 2px rgba(22,33,27,.05), 0 1px 3px rgba(22,33,27,.06);
+  --sh-2: 0 2px 6px rgba(22,33,27,.06), 0 8px 24px rgba(22,33,27,.09);
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* ============ 2. 基础 ============ */
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+[hidden]{ display:none !important; }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+body{
+  font-family:var(--f-sans);
+  font-size:16px;
+  line-height:1.75;
+  color:var(--c-text);
+  background:var(--c-paper);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body.no-scroll{ overflow:hidden; }
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; }
+ul,ol{ list-style:none; }
+::selection{ background:var(--c-gold); color:var(--c-ink); }
+
+:focus-visible{ outline:2px solid var(--c-forest); outline-offset:2px; border-radius:4px; }
+.section-dark :focus-visible{ outline-color:var(--c-gold); }
+
+.container{ width:min(var(--w-max), calc(100% - 48px)); margin-inline:auto; }
+.section{ padding:96px 0; scroll-margin-top:calc(var(--nav-h) + 20px); position:relative; }
+.section-alt{ background:var(--c-paper-2); }
+
+/* 图标（SVG 雪碧图引用） */
+.icon{
+  width:20px; height:20px; flex:none;
+  fill:none; stroke:currentColor; stroke-width:1.7;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+
+/* ============ 3. 通用组件 ============ */
+/* 3.1 区块标题 */
+.sec-head{ max-width:760px; margin-bottom:48px; }
+.kicker{
+  display:inline-flex; align-items:center; gap:10px;
+  font-size:13px; font-weight:600; letter-spacing:.06em;
+  color:var(--c-forest);
+}
+.kicker::before{ content:""; width:26px; height:1px; background:var(--c-gold); }
+.sec-head h2{
+  font-family:var(--f-serif); font-weight:700;
+  font-size:clamp(26px, 4vw, 38px); line-height:1.3;
+  color:var(--c-ink); margin:14px 0 14px;
+}
+.sec-head p{ color:var(--c-text-2); font-size:16px; }
+
+/* 3.2 按钮 */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  font-size:15px; font-weight:600; line-height:1;
+  padding:13px 24px; border-radius:var(--r-sm);
+  border:1px solid transparent; cursor:pointer;
+  touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+  user-select:none; white-space:nowrap;
+  transition:background-color .25s var(--ease), color .25s var(--ease),
+             border-color .25s var(--ease), transform .25s var(--ease),
+             box-shadow .25s var(--ease), opacity .25s var(--ease);
+}
+.btn:active{ transform:translateY(1px); }
+.btn-primary{ background:var(--c-ink); color:var(--c-paper); }
+.btn-primary:hover{ background:var(--c-forest); transform:translateY(-1px); box-shadow:var(--sh-2); }
+.btn-accent{ background:var(--c-terra); color:#fff; }
+.btn-accent:hover{ background:#A94C24; transform:translateY(-1px); box-shadow:var(--sh-2); }
+.btn-ghost{ border-color:currentColor; background:transparent; }
+.btn-ghost:hover{ background:rgba(22,33,27,.06); }
+.section-dark .btn-ghost:hover{ background:rgba(246,243,236,.1); }
+.btn-sm{ padding:9px 16px; font-size:14px; }
+.btn-block{ width:100%; }
+.btn[disabled]{ opacity:.62; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+.btn .spin{
+  width:15px; height:15px; flex:none; display:none;
+  border:2px solid currentColor; border-right-color:transparent;
+  border-radius:50%; animation:spin .7s linear infinite;
+}
+.btn.is-loading .spin{ display:block; }
+.section-dark .btn-primary{ background:var(--c-paper); color:var(--c-ink); }
+.section-dark .btn-primary:hover{ background:#fff; }
+
+/* 3.3 卡片 */
+.card{
+  background:var(--c-card); border:1px solid var(--c-line);
+  border-radius:var(--r-md); padding:26px;
+  box-shadow:var(--sh-1);
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease), border-color .3s var(--ease);
+}
+.card:hover{ transform:translateY(-3px); box-shadow:var(--sh-2); border-color:var(--c-line-2); }
+.card .icon{ color:var(--c-forest); }
+.card h3{ font-size:18px; color:var(--c-ink); margin:14px 0 8px; }
+.card p{ font-size:14.5px; color:var(--c-text-2); }
+.card-ico{
+  width:44px; height:44px; border-radius:var(--r-sm);
+  display:grid; place-items:center;
+  background:rgba(47,107,74,.1); color:var(--c-forest);
+}
+
+/* 3.4 网格 */
+.grid{ display:grid; gap:20px; }
+.g-2{ grid-template-columns:repeat(2, 1fr); }
+.g-3{ grid-template-columns:repeat(3, 1fr); }
+.g-4{ grid-template-columns:repeat(4, 1fr); }
+
+/* 3.5 药丸标签 / 筹码 */
+.chip{
+  display:inline-flex; align-items:center; gap:7px;
+  font-size:13.5px; font-weight:500; line-height:1;
+  padding:9px 15px; border-radius:999px;
+  border:1px solid var(--c-line-2); background:var(--c-card);
+  color:var(--c-text-2); cursor:default;
+}
+.tag{
+  display:inline-block; font-size:12px; font-weight:500;
+  padding:4px 11px; border-radius:999px;
+  background:var(--c-paper-2); color:var(--c-text-2);
+}
+.note{ font-size:13px; color:var(--c-text-3); line-height:1.7; }
+
+/* 3.6 数据小卡 */
+.mini-stat{
+  background:var(--c-card); border:1px solid var(--c-line);
+  border-radius:var(--r-md); padding:22px 24px;
+}
+.mini-stat .num{
+  font-family:var(--f-serif); font-weight:700;
+  font-size:clamp(24px, 3vw, 32px); color:var(--c-ink); line-height:1.15;
+}
+.mini-stat .num small{ font-size:.5em; font-weight:600; color:var(--c-text-2); margin-left:2px; }
+.mini-stat .lbl{ font-size:13.5px; color:var(--c-text-2); margin-top:6px; }
+
+/* 3.7 滚动显现（仅在 JS 可用时启用入场动画） */
+.js [data-reveal]{ opacity:0; transform:translateY(18px); transition:opacity .65s var(--ease), transform .65s var(--ease); }
+.js [data-reveal].in{ opacity:1; transform:none; }
+
+/* ============ 4. 顶部导航 ============ */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  padding-top:env(safe-area-inset-top);
+  background:transparent; color:var(--c-paper);
+  border-bottom:1px solid transparent;
+  transition:background-color .35s var(--ease), color .35s var(--ease),
+             box-shadow .35s var(--ease), border-color .35s var(--ease);
+}
+.nav.is-scrolled{
+  background:var(--c-paper); color:var(--c-ink);
+  border-bottom-color:var(--c-line);
+  box-shadow:0 1px 14px rgba(22,33,27,.07);
+}
+.nav-inner{ display:flex; align-items:center; gap:26px; height:var(--nav-h); }
+.brand{ display:flex; align-items:center; gap:11px; flex:none; }
+.brand-mark{
+  width:38px; height:38px; border-radius:10px; flex:none;
+  background:var(--c-ink); color:var(--c-gold);
+  display:grid; place-items:center;
+}
+.brand-mark .icon{ width:22px; height:22px; }
+.brand-text{ display:flex; flex-direction:column; line-height:1.2; }
+.brand-text strong{ font-family:var(--f-serif); font-size:19px; letter-spacing:.02em; }
+.brand-text small{ font-size:10px; letter-spacing:.22em; opacity:.62; }
+.nav-links{ display:flex; align-items:center; gap:4px; margin-left:auto; }
+.nav-links a{
+  position:relative; padding:8px 13px; border-radius:var(--r-sm);
+  font-size:15px; opacity:.82;
+  transition:opacity .25s var(--ease), background-color .25s var(--ease);
+}
+.nav-links a:hover{ opacity:1; background:rgba(128,128,128,.14); }
+.nav-links a.is-active{ opacity:1; font-weight:600; }
+.nav-links a.is-active::after{
+  content:""; position:absolute; left:13px; right:13px; bottom:2px;
+  height:2px; border-radius:2px; background:var(--c-gold);
+}
+.nav-actions{ display:flex; align-items:center; gap:12px; flex:none; }
+.nav .btn-primary{ background:var(--c-paper); color:var(--c-ink); }
+.nav .btn-primary:hover{ background:#fff; }
+.nav.is-scrolled .btn-primary{ background:var(--c-ink); color:var(--c-paper); }
+.nav.is-scrolled .btn-primary:hover{ background:var(--c-forest); }
+
+/* 汉堡按钮 */
+.nav-burger{
+  display:none; width:42px; height:42px; border:0; background:transparent;
+  cursor:pointer; position:relative; -webkit-tap-highlight-color:transparent;
+}
+.nav-burger span{
+  position:absolute; left:10px; right:10px; height:2px; border-radius:2px;
+  background:currentColor; transition:transform .3s var(--ease), top .3s var(--ease);
+}
+.nav-burger span:nth-child(1){ top:14px; }
+.nav-burger span:nth-child(2){ top:20px; }
+.nav-burger span:nth-child(3){ top:26px; }
+.nav-burger.is-open span:nth-child(1){ top:20px; transform:rotate(45deg); }
+.nav-burger.is-open span:nth-child(2){ opacity:0; }
+.nav-burger.is-open span:nth-child(3){ top:20px; transform:rotate(-45deg); }
+
+/* ============ 5. 移动端抽屉 ============ */
+.drawer{
+  position:fixed; inset:0; z-index:105;
+  visibility:hidden; transition:visibility 0s .35s;
+}
+.drawer.is-open{ visibility:visible; transition-delay:0s; }
+.drawer-mask{
+  position:absolute; inset:0; background:rgba(22,33,27,.48);
+  opacity:0; transition:opacity .3s var(--ease);
+}
+.drawer.is-open .drawer-mask{ opacity:1; }
+.drawer-panel{
+  position:absolute; top:0; right:0; bottom:0;
+  width:min(82vw, 320px);
+  background:var(--c-paper);
+  transform:translateX(100%);
+  transition:transform .35s var(--ease);
+  display:flex; flex-direction:column; gap:6px;
+  padding:calc(20px + env(safe-area-inset-top)) 26px calc(28px + env(safe-area-inset-bottom));
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
+}
+.drawer.is-open .drawer-panel{ transform:none; }
+.drawer-panel .drawer-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding-bottom:16px; margin-bottom:10px; border-bottom:1px solid var(--c-line);
+}
+.drawer-panel a.d-link{
+  padding:13px 10px; border-radius:var(--r-sm); font-size:16px;
+  color:var(--c-text); transition:background-color .25s var(--ease), color .25s var(--ease);
+}
+.drawer-panel a.d-link:hover, .drawer-panel a.d-link.is-active{ background:var(--c-paper-2); color:var(--c-forest); font-weight:600; }
+.drawer-panel .btn{ margin-top:18px; }
+
+/* ============ 6. 首屏 Hero ============ */
+.hero{
+  position:relative; overflow:hidden;
+  background:var(--c-ink); color:var(--c-paper);
+  padding:calc(var(--nav-h) + 72px + env(safe-area-inset-top)) 0 96px;
+  text-align:center;
+}
+/*  subtle 织纹 + 顶部氛围光（非模糊叠加） */
+.hero::before{
+  content:""; position:absolute; inset:0;
+  background-image:repeating-linear-gradient(45deg, rgba(200,155,60,.055) 0 1.5px, transparent 1.5px 15px);
+}
+.hero::after{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(115% 85% at 50% 0%, rgba(47,107,74,.32), transparent 62%);
+}
+.hero .container{ position:relative; z-index:1; }
+.hero-pills{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:30px; }
+.hero-pills .chip{
+  background:rgba(246,243,236,.08); border-color:var(--line-dark);
+  color:var(--c-on-dark); backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+.hero h1{
+  font-family:var(--f-serif); font-weight:700;
+  font-size:clamp(46px, 9vw, 84px); line-height:1.12; letter-spacing:.02em;
+  color:#fff;
+}
+.hero .hero-sub{
+  font-family:var(--f-serif);
+  font-size:clamp(17px, 2.6vw, 23px); letter-spacing:.12em;
+  color:var(--c-gold); margin-top:14px;
+}
+.hero-lead{
+  max-width:720px; margin:26px auto 0;
+  font-size:clamp(15px, 1.8vw, 17px); line-height:2; color:var(--c-on-dark);
+}
+.hero-cta{ display:flex; flex-wrap:wrap; justify-content:center; gap:14px; margin-top:38px; }
+.hero .btn-primary{ background:var(--c-paper); color:var(--c-ink); }
+.hero .btn-primary:hover{ background:#fff; }
+.hero .btn-ghost{ color:var(--c-paper); }
+.hero .btn-ghost:hover{ background:rgba(246,243,236,.12); }
+
+.hero-stats{
+  display:grid; grid-template-columns:repeat(4, 1fr);
+  margin-top:64px; border-top:1px solid var(--line-dark);
+}
+.hero-stats .stat{ padding:26px 10px 4px; border-left:1px solid var(--line-dark); }
+.hero-stats .stat:first-child{ border-left:0; }
+.stat-num{
+  font-family:var(--f-serif); font-weight:700;
+  font-size:clamp(24px, 3.4vw, 36px); color:#fff; line-height:1.1;
+}
+.stat-label{ font-size:13px; color:var(--c-on-dark); margin-top:8px; }
+
+.hero-cue{
+  margin:44px auto 0; width:26px; height:42px;
+  border:1.5px solid var(--line-dark); border-radius:999px;
+  display:grid; place-items:start center; padding-top:7px;
+  background:transparent; cursor:pointer;
+}
+.hero-cue i{
+  width:4px; height:8px; border-radius:999px; background:var(--c-gold);
+  animation:cue 1.8s var(--ease) infinite;
+}
+.hero-wave{ position:absolute; left:0; right:0; bottom:-1px; z-index:1; width:100%; height:64px; }
+
+/* Hero 入场动画（JS 加载后启用，禁用 JS 时直接可见） */
+.js .hero .a-rise{ opacity:0; transform:translateY(18px); }
+.hero.is-loaded .a-rise{ animation:riseIn .8s var(--ease) forwards; animation-delay:var(--d, 0s); }
+
+/* ============ 7. 项目概况 ============ */
+.about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:start; }
+.about-text p{ color:var(--c-text-2); margin-bottom:16px; }
+.about-text p strong{ color:var(--c-ink); }
+.strip{
+  display:grid; grid-template-columns:1fr auto 1fr auto 1fr;
+  align-items:stretch; gap:14px; margin-top:40px;
+}
+.strip .arrow{ display:grid; place-items:center; color:var(--c-gold); font-size:26px; font-family:var(--f-serif); }
+.strip-item{
+  background:var(--c-card); border:1px solid var(--c-line); border-radius:var(--r-md);
+  padding:20px 22px; box-shadow:var(--sh-1);
+}
+.strip-item .t{ font-size:12px; font-weight:700; letter-spacing:.08em; color:var(--c-forest); margin-bottom:6px; }
+.strip-item .v{ font-family:var(--f-serif); font-size:17px; font-weight:700; color:var(--c-ink); }
+.strip-item .d{ font-size:13px; color:var(--c-text-2); margin-top:6px; line-height:1.7; }
+.chips-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:34px; align-items:center; }
+.chips-row .chips-label{ font-size:13px; font-weight:600; color:var(--c-text-2); margin-right:4px; }
+
+/* ============ 8. 市场分析（页签） ============ */
+.tab-list{
+  position:relative; display:inline-flex; flex-wrap:wrap; gap:4px;
+  background:var(--c-paper-2); border:1px solid var(--c-line);
+  border-radius:999px; padding:5px; margin-bottom:36px;
+}
+.tab{
+  position:relative; z-index:1; border:0; background:transparent; cursor:pointer;
+  padding:10px 22px; border-radius:999px;
+  font-size:14.5px; font-weight:500; color:var(--c-text-2);
+  -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+  transition:color .3s var(--ease);
+}
+.tab:hover{ color:var(--c-ink); }
+.tab.is-active{ color:var(--c-ink); font-weight:600; }
+.tab-ind{
+  position:absolute; z-index:0; top:5px; bottom:5px; left:0; width:0;
+  background:var(--c-card); border-radius:999px; box-shadow:var(--sh-1);
+  transition:transform .35s var(--ease), width .35s var(--ease);
+}
+.tab-panel{ display:none; }
+.tab-panel.is-active{ display:block; animation:fadeUp .45s var(--ease); }
+
+/* 政策时间线 */
+.policy-list{ display:grid; gap:0; }
+.policy-item{
+  display:grid; grid-template-columns:96px 1fr; gap:20px;
+  padding:18px 0; border-bottom:1px dashed var(--c-line);
+}
+.policy-item:last-child{ border-bottom:0; }
+.policy-date{
+  font-family:var(--f-serif); font-weight:700; font-size:15px;
+  color:var(--c-forest); padding-top:2px;
+}
+.policy-item h4{ font-size:15.5px; color:var(--c-ink); margin-bottom:4px; }
+.policy-item p{ font-size:14px; color:var(--c-text-2); }
+
+/* 洞察列表 */
+.insight-list{ display:grid; gap:14px; }
+.insight-list li{
+  display:flex; gap:12px; align-items:flex-start;
+  font-size:14.5px; color:var(--c-text-2);
+}
+.insight-list .icon{ color:var(--c-gold); margin-top:5px; }
+.insight-list strong{ color:var(--c-ink); }
+
+/* 提示条 */
+.callout{
+  display:flex; gap:14px; align-items:flex-start;
+  background:var(--c-card); border:1px solid var(--c-line);
+  border-left:3px solid var(--c-forest);
+  border-radius:var(--r-sm); padding:18px 22px; margin-top:26px;
+}
+.callout .icon{ color:var(--c-forest); margin-top:3px; }
+.callout p{ font-size:14.5px; color:var(--c-text-2); }
+.callout strong{ color:var(--c-ink); }
+
+/* 客群卡 */
+.persona{ display:grid; gap:20px; }
+.persona-group-title{
+  display:flex; align-items:center; gap:10px;
+  font-size:15px; font-weight:700; color:var(--c-ink); margin-bottom:16px;
+}
+.persona-group-title .tag{ background:rgba(47,107,74,.12); color:var(--c-forest); font-weight:600; }
+
+/* ============ 9. 规划设计（筛选） ============ */
+.filter-bar{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:30px; }
+.filter-bar .chip{
+  cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+  transition:background-color .25s var(--ease), color .25s var(--ease),
+             border-color .25s var(--ease), transform .2s var(--ease);
+}
+.filter-bar .chip:hover{ border-color:var(--c-forest); color:var(--c-forest); }
+.filter-bar .chip:active{ transform:scale(.96); }
+.filter-bar .chip.is-active{ background:var(--c-ink); border-color:var(--c-ink); color:var(--c-paper); }
+.filter-count{ font-size:13px; color:var(--c-text-3); margin-left:6px; }
+.is-hidden{ display:none !important; }
+
+.style-card{ overflow:hidden; padding:0; }
+.style-card .scene{ height:170px; background:var(--c-paper-2); border-bottom:1px solid var(--c-line); }
+.style-card .body{ padding:24px 26px 26px; }
+.style-card h3{ display:flex; align-items:center; gap:10px; margin:0 0 10px; }
+.style-card h3 .icon{ color:var(--c-terra); }
+.style-card p{ font-size:14.5px; color:var(--c-text-2); min-height:66px; }
+.style-card .tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+
+.plot-card{ display:grid; gap:0; padding:0; overflow:hidden; }
+.plot-card .plot-head{
+  padding:24px 28px; color:#fff;
+  display:flex; align-items:center; gap:14px;
+}
+.plot-card.a .plot-head{ background:var(--c-forest); }
+.plot-card.b .plot-head{ background:var(--c-terra); }
+.plot-card .plot-head .icon{ width:26px; height:26px; }
+.plot-card .plot-head h3{ margin:0; color:#fff; font-size:19px; }
+.plot-card .plot-head span{ font-size:13px; opacity:.85; margin-left:auto; }
+.plot-card .plot-body{ padding:24px 28px 26px; }
+.plot-card .plot-body p{ font-size:14.5px; color:var(--c-text-2); margin-bottom:14px; }
+.plot-card .plot-body li{
+  display:flex; gap:10px; align-items:center; font-size:14.5px;
+  color:var(--c-text); padding:7px 0;
+}
+.plot-card .plot-body li .icon{ width:16px; height:16px; color:var(--c-forest); }
+
+/* 新兴技术条 */
+.tech-strip{
+  margin-top:26px; background:var(--c-card);
+  border:1px solid var(--c-line); border-radius:var(--r-md);
+  padding:28px; box-shadow:var(--sh-1);
+}
+.tech-strip .tech-head{ display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.tech-strip .tech-head .icon{ color:var(--c-terra); }
+.tech-strip .tech-head h3{ font-size:18px; color:var(--c-ink); }
+.tech-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; }
+.tech-item{ background:var(--c-paper-2); border-radius:var(--r-sm); padding:16px 18px; }
+.tech-item b{ display:block; font-size:14.5px; color:var(--c-ink); margin-bottom:4px; }
+.tech-item span{ font-size:13px; color:var(--c-text-2); line-height:1.65; }
+
+/* ============ 10. 运营模式（手风琴） ============ */
+.acc-item{
+  background:var(--c-card); border:1px solid var(--c-line);
+  border-radius:var(--r-md); margin-bottom:14px; overflow:hidden;
+  transition:border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.acc-item.is-open{ border-color:var(--c-line-2); box-shadow:var(--sh-1); }
+.acc-head{
+  width:100%; display:flex; align-items:center; gap:16px;
+  padding:20px 24px; background:transparent; border:0; cursor:pointer;
+  text-align:left; -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+}
+.acc-idx{ font-family:var(--f-serif); font-weight:700; color:var(--c-gold); font-size:15px; flex:none; }
+.acc-title{ flex:1; font-size:17px; font-weight:600; color:var(--c-ink); }
+.acc-icon{ position:relative; width:18px; height:18px; flex:none; }
+.acc-icon::before,.acc-icon::after{
+  content:""; position:absolute; background:var(--c-text-2);
+  transition:transform .3s var(--ease), background-color .3s var(--ease);
+}
+.acc-icon::before{ left:0; top:8px; width:18px; height:2px; }
+.acc-icon::after{ left:8px; top:0; width:2px; height:18px; }
+.acc-item.is-open .acc-icon::before{ transform:rotate(180deg); background:var(--c-forest); }
+.acc-item.is-open .acc-icon::after{ transform:rotate(90deg); background:var(--c-forest); }
+.acc-panel{ max-height:0; overflow:hidden; transition:max-height .45s var(--ease); }
+.acc-body{ padding:0 24px 22px 56px; font-size:14.5px; color:var(--c-text-2); line-height:1.95; }
+.acc-body strong{ color:var(--c-ink); }
+
+/* 智慧景区系统卡 */
+.sys-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; }
+.sys-card{
+  background:var(--c-card); border:1px solid var(--c-line);
+  border-radius:var(--r-md); padding:20px;
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.sys-card:hover{ transform:translateY(-3px); box-shadow:var(--sh-2); }
+.sys-card .icon{ color:var(--c-forest); }
+.sys-card h4{ font-size:15.5px; color:var(--c-ink); margin:10px 0 6px; }
+.sys-card p{ font-size:13px; color:var(--c-text-2); line-height:1.7; }
+
+/* ============ 11. 营销策略 ============ */
+.sell-card{ text-align:left; }
+.sell-card .card-ico{ background:rgba(192,90,46,.1); color:var(--c-terra); }
+.sell-card p{ min-height:48px; }
+.channel-card{ position:relative; overflow:hidden; }
+.channel-card .badge{
+  position:absolute; top:16px; right:16px;
+  font-family:var(--f-serif); font-weight:700; font-size:22px;
+  color:var(--c-paper-2);
+}
+.channel-card h3{ margin-top:0; }
+.promo-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.promo-card .card-ico{ background:rgba(200,155,60,.16); color:#9A7420; }
+.promo-card li{
+  display:flex; gap:10px; align-items:flex-start;
+  font-size:14.5px; color:var(--c-text-2); padding:8px 0;
+}
+.promo-card li .icon{ width:16px; height:16px; color:var(--c-forest); margin-top:5px; }
+.mascot-card{ display:grid; grid-template-columns:1fr auto; gap:28px; align-items:center; }
+.seal{
+  width:108px; height:108px; border-radius:18px; flex:none;
+  background:var(--c-terra); color:#fff;
+  display:grid; place-items:center;
+  font-family:var(--f-serif); font-weight:700; font-size:34px;
+  writing-mode:vertical-rl; letter-spacing:.18em;
+  box-shadow:var(--sh-2);
+}
+.mascot-card p{ font-size:14.5px; color:var(--c-text-2); margin-bottom:14px; }
+.mascot-card .chips-row{ margin-top:0; }
+
+/* ============ 12. 投资分析 ============ */
+.bars-panel{
+  background:var(--c-card); border:1px solid var(--c-line);
+  border-radius:var(--r-md); padding:28px; box-shadow:var(--sh-1);
+}
+.bars-panel h3{ font-size:18px; color:var(--c-ink); margin-bottom:22px; display:flex; align-items:center; gap:10px; }
+.bars-panel h3 .icon{ color:var(--c-forest); }
+.bar-row{ margin-bottom:20px; }
+.bar-row:last-child{ margin-bottom:0; }
+.bar-top{ display:flex; align-items:baseline; gap:10px; margin-bottom:8px; font-size:14px; color:var(--c-text-2); }
+.bar-top b{ font-family:var(--f-serif); font-size:16px; color:var(--c-ink); }
+.bar-top i{ margin-left:auto; font-style:normal; font-size:13px; }
+.bar-track{ height:14px; background:var(--c-paper-2); border-radius:999px; overflow:hidden; }
+.bar-fill{ height:100%; width:0; border-radius:999px; transition:width 1.15s var(--ease); }
+.bar-fill.grown{ width:var(--w); } /* 由 IntersectionObserver 在滚动进入视口时添加 */
+.bar-fill.c-forest{ background:var(--c-forest); }
+.bar-fill.c-terra{ background:var(--c-terra); }
+.bar-fill.c-gold{ background:var(--c-gold); }
+.bar-fill.c-ink{ background:var(--c-ink); }
+.fin-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; }
+.fin-item{
+  background:var(--c-card); border:1px solid var(--c-line);
+  border-radius:var(--r-md); padding:20px 22px; text-align:center;
+}
+.fin-item .num{ font-family:var(--f-serif); font-weight:700; font-size:26px; color:var(--c-forest); }
+.fin-item .num small{ font-size:.55em; color:var(--c-text-2); }
+.fin-item .lbl{ font-size:13px; color:var(--c-text-2); margin-top:4px; }
+.fin-item.hl .num{ color:var(--c-terra); }
+
+/* ============ 13. 实施计划（时间线） ============ */
+.timeline{ list-style:none; display:grid; gap:26px; position:relative; }
+.tl-item{ position:relative; padding-left:40px; }
+.tl-item::before{
+  content:""; position:absolute; left:11px; top:32px; bottom:-26px;
+  width:2px; background:var(--c-line-2);
+}
+.tl-item:last-child::before{ display:none; }
+.tl-dot{
+  position:absolute; left:0; top:8px; width:24px; height:24px;
+  border-radius:50%; border:2px solid var(--c-line-2); background:var(--c-card);
+  display:grid; place-items:center; color:transparent;
+}
+.tl-dot .icon{ width:12px; height:12px; }
+.tl-item.is-done .tl-dot{ background:var(--c-forest); border-color:var(--c-forest); color:#fff; }
+.tl-item.is-doing .tl-dot{ background:var(--c-terra); border-color:var(--c-terra); color:#fff; animation:pulse 2.2s infinite; }
+.tl-card{
+  background:var(--c-card); border:1px solid var(--c-line);
+  border-radius:var(--r-md); padding:20px 22px; box-shadow:var(--sh-1);
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.tl-card:hover{ transform:translateY(-2px); box-shadow:var(--sh-2); }
+.tl-state{ display:inline-block; font-size:12px; font-weight:600; padding:3px 11px; border-radius:999px; margin-bottom:10px; }
+.is-done .tl-state{ background:rgba(47,107,74,.12); color:var(--c-forest); }
+.is-doing .tl-state{ background:rgba(192,90,46,.13); color:var(--c-terra); }
+.is-todo .tl-state{ background:var(--c-paper-2); color:var(--c-text-2); }
+.tl-card h3{ font-size:17px; color:var(--c-ink); margin-bottom:6px; }
+.tl-card p{ font-size:14px; color:var(--c-text-2); }
+
+/* ============ 14. 联系区（暗色） ============ */
+.section-dark{ background:var(--c-ink); color:var(--c-paper); color-scheme:dark; }
+.section-dark .sec-head h2{ color:#fff; }
+.section-dark .sec-head p{ color:var(--c-on-dark); }
+.section-dark .kicker{ color:var(--c-gold); }
+.contact-grid{ display:grid; grid-template-columns:1fr 1.1fr; gap:48px; align-items:start; }
+.contact-info .fact{
+  display:flex; gap:14px; align-items:flex-start;
+  padding:15px 0; border-bottom:1px solid var(--line-dark);
+}
+.contact-info .fact:last-of-type{ border-bottom:0; }
+.contact-info .fact .icon{ color:var(--c-gold); margin-top:4px; }
+.contact-info .fact b{ display:block; font-size:14px; color:#fff; font-weight:600; }
+.contact-info .fact span{ font-size:14px; color:var(--c-on-dark); }
+.contact-info .chips-row .chip{ background:transparent; border-color:var(--line-dark); color:var(--c-on-dark); }
+.contact-info .chips-label{ color:#fff; }
+
+/* 表单 */
+.form{ display:grid; gap:18px; }
+.form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.field{ display:grid; gap:8px; }
+.field label{ font-size:14px; font-weight:600; color:var(--c-paper); }
+.field .req{ color:var(--c-terra); margin-left:2px; }
+.field input,.field select,.field textarea{
+  width:100%; font:inherit; font-size:16px; /* 16px 起：避免 iOS 聚焦自动放大 */
+  color:var(--c-paper); background:var(--c-ink-2);
+  border:1px solid rgba(246,243,236,.2); border-radius:var(--r-sm);
+  padding:12px 14px; -webkit-appearance:none; appearance:none;
+  transition:border-color .25s var(--ease), box-shadow .25s var(--ease), background-color .25s var(--ease);
+}
+.field textarea{ resize:vertical; min-height:96px; }
+.field input::placeholder,.field textarea::placeholder{ color:rgba(246,243,236,.4); }
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none; border-color:var(--c-gold);
+  box-shadow:0 0 0 3px rgba(200,155,60,.18);
+}
+.field.is-invalid input,.field.is-invalid select,.field.is-invalid textarea{ border-color:var(--c-terra); }
+.field-msg{ display:none; font-size:13px; color:#E8855A; }
+.field.is-invalid .field-msg{ display:block; }
+.sel{ position:relative; }
+.sel::after{
+  content:""; position:absolute; right:16px; top:50%;
+  width:8px; height:8px; pointer-events:none;
+  border-right:2px solid rgba(246,243,236,.6); border-bottom:2px solid rgba(246,243,236,.6);
+  transform:translateY(-70%) rotate(45deg);
+}
+.field select{ padding-right:40px; cursor:pointer; }
+.ta-foot{ display:flex; justify-content:space-between; font-size:12px; color:rgba(246,243,236,.5); }
+.form-foot{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+.form-foot .note{ flex:1; min-width:200px; }
+.form.shake{ animation:shake .45s var(--ease); }
+.form-success{ text-align:center; padding:44px 24px; }
+.form-success .ok{
+  width:64px; height:64px; margin:0 auto 20px; border-radius:50%;
+  background:var(--c-forest); color:#fff; display:grid; place-items:center;
+  animation:pop .5s var(--ease);
+}
+.form-success .ok .icon{ width:30px; height:30px; stroke-width:2.4; }
+.form-success h3{ font-family:var(--f-serif); font-size:24px; color:#fff; margin-bottom:10px; }
+.form-success p{ font-size:15px; color:var(--c-on-dark); max-width:420px; margin:0 auto 24px; }
+.form-success strong{ color:#fff; }
+
+/* ============ 15. 页脚 ============ */
+.footer{ background:var(--c-ink-3); color:var(--c-on-dark); padding:64px 0 0; }
+.footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; padding-bottom:44px; }
+.footer .brand-text strong{ color:var(--c-paper); }
+.footer-desc{ font-size:14px; margin-top:18px; max-width:340px; line-height:1.9; }
+.footer h4{ font-size:14px; color:var(--c-paper); margin-bottom:16px; letter-spacing:.04em; }
+.footer-links{ display:grid; gap:10px; }
+.footer-links a{
+  font-size:14px; width:fit-content;
+  transition:color .25s var(--ease), transform .25s var(--ease);
+}
+.footer-links a:hover{ color:var(--c-gold); transform:translateX(3px); }
+.footer-bottom{
+  border-top:1px solid var(--line-dark);
+  padding:20px 0 calc(22px + env(safe-area-inset-bottom));
+  display:flex; flex-wrap:wrap; align-items:center; gap:16px;
+  font-size:13px;
+}
+.footer-bottom .spacer{ flex:1; }
+.gray-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  background:transparent; border:1px solid var(--line-dark);
+  color:var(--c-on-dark); border-radius:999px; padding:7px 14px;
+  font-size:13px; cursor:pointer; -webkit-tap-highlight-color:transparent;
+  transition:border-color .25s var(--ease), color .25s var(--ease), background-color .25s var(--ease);
+}
+.gray-btn:hover{ border-color:var(--c-gold); color:var(--c-gold); }
+.gray-btn .dot{ width:8px; height:8px; border-radius:50%; background:var(--c-text-3); transition:background-color .25s var(--ease); }
+.gray-btn[aria-pressed="true"]{ border-color:var(--c-gold); color:var(--c-gold); }
+.gray-btn[aria-pressed="true"] .dot{ background:var(--c-gold); }
+
+/* ============ 16. 弹窗 / Toast / 回到顶部 ============ */
+.modal{ position:fixed; inset:0; z-index:110; display:grid; place-items:center; padding:20px; }
+.modal-mask{ position:absolute; inset:0; background:rgba(22,33,27,.56); opacity:0; transition:opacity .3s var(--ease); }
+.modal.is-open .modal-mask{ opacity:1; }
+.modal-card{
+  position:relative; width:min(520px, 100%);
+  background:var(--c-card); border-radius:var(--r-lg);
+  padding:36px; box-shadow:0 24px 64px rgba(22,33,27,.3);
+  opacity:0; transform:translateY(16px) scale(.97);
+  transition:opacity .3s var(--ease), transform .3s var(--ease);
+}
+.modal.is-open .modal-card{ opacity:1; transform:none; }
+.modal-close{
+  position:absolute; top:14px; right:14px;
+  width:36px; height:36px; border:0; border-radius:50%;
+  background:var(--c-paper-2); color:var(--c-text-2); cursor:pointer;
+  display:grid; place-items:center; -webkit-tap-highlight-color:transparent;
+  transition:background-color .25s var(--ease), color .25s var(--ease), transform .25s var(--ease);
+}
+.modal-close:hover{ background:var(--c-terra); color:#fff; transform:rotate(90deg); }
+.modal-card h3{ font-family:var(--f-serif); font-size:24px; color:var(--c-ink); margin:12px 0 10px; }
+.modal-card .modal-lead{ font-size:14.5px; color:var(--c-text-2); margin-bottom:20px; }
+.modal-facts{ display:grid; gap:10px; margin-bottom:26px; }
+.modal-facts li{ display:flex; gap:10px; align-items:center; font-size:14px; color:var(--c-text); }
+.modal-facts .icon{ width:16px; height:16px; color:var(--c-forest); }
+.modal-actions{ display:flex; flex-wrap:wrap; gap:12px; }
+
+.toast-wrap{
+  position:fixed; left:50%; transform:translateX(-50%);
+  bottom:calc(24px + env(safe-area-inset-bottom));
+  z-index:120; display:grid; gap:10px;
+  width:min(92vw, 440px); pointer-events:none;
+}
+.toast{
+  display:flex; align-items:center; gap:10px;
+  background:var(--c-ink); color:var(--c-paper);
+  border-left:3px solid var(--c-gold);
+  border-radius:var(--r-sm); padding:13px 16px;
+  box-shadow:var(--sh-2); font-size:14px; pointer-events:auto;
+  opacity:0; transform:translateY(14px);
+  transition:opacity .35s var(--ease), transform .35s var(--ease);
+}
+.toast.is-show{ opacity:1; transform:none; }
+.toast .icon{ width:17px; height:17px; flex:none; }
+.toast.is-success{ border-left-color:var(--c-forest); }
+.toast.is-success .icon{ color:#7FB89A; }
+.toast.is-error{ border-left-color:var(--c-terra); }
+.toast.is-error .icon{ color:#E8855A; }
+.toast.is-info .icon{ color:var(--c-gold); }
+
+.back-top{
+  position:fixed; right:calc(20px + env(safe-area-inset-right));
+  bottom:calc(20px + env(safe-area-inset-bottom));
+  z-index:90; width:46px; height:46px; border-radius:50%;
+  background:var(--c-ink); color:var(--c-paper); border:0;
+  display:grid; place-items:center; cursor:pointer;
+  box-shadow:var(--sh-2);
+  opacity:0; transform:translateY(10px); pointer-events:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:opacity .3s var(--ease), transform .3s var(--ease), background-color .25s var(--ease);
+}
+.back-top.is-show{ opacity:1; transform:none; pointer-events:auto; }
+.back-top:hover{ background:var(--c-forest); }
+
+/* ============ 17. 灰度预览模式（验证三级明暗对比） ============ */
+html.is-gray .nav,
+html.is-gray main,
+html.is-gray .footer,
+html.is-gray .modal,
+html.is-gray .toast-wrap,
+html.is-gray .back-top,
+html.is-gray .drawer{ filter:grayscale(1); transition:filter .45s ease; }
+
+/* ============ 18. 动画关键帧 ============ */
+@keyframes riseIn{ from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:none; } }
+@keyframes fadeUp{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+@keyframes pop{ 0%{ transform:scale(.4); opacity:0; } 100%{ transform:scale(1); opacity:1; } }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+@keyframes pulse{
+  0%{ box-shadow:0 0 0 0 rgba(192,90,46,.5); }
+  70%{ box-shadow:0 0 0 12px rgba(192,90,46,0); }
+  100%{ box-shadow:0 0 0 0 rgba(192,90,46,0); }
+}
+@keyframes shake{
+  10%,90%{ transform:translateX(-2px); } 20%,80%{ transform:translateX(3px); }
+  30%,50%,70%{ transform:translateX(-5px); } 40%,60%{ transform:translateX(5px); }
+}
+@keyframes cue{ 0%,100%{ transform:translateY(0); opacity:.95; } 50%{ transform:translateY(8px); opacity:.45; } }
+
+/* ============ 19. 响应式 ============ */
+@media (max-width: 1200px){
+  .nav-links{ display:none; }
+  .nav-burger{ display:block; }
+  .nav-inner{ justify-content:space-between; }
+  .nav-actions{ margin-left:auto; }
+}
+@media (max-width: 1024px){
+  .g-4{ grid-template-columns:repeat(2, 1fr); }
+  .sys-grid{ grid-template-columns:repeat(2, 1fr); }
+  .tech-grid{ grid-template-columns:repeat(2, 1fr); }
+  .about-grid{ grid-template-columns:1fr; gap:32px; }
+  .contact-grid{ grid-template-columns:1fr; gap:36px; }
+  .footer-grid{ grid-template-columns:1fr 1fr; }
+  .footer-brand{ grid-column:1 / -1; }
+}
+@media (max-width: 860px){
+  .section{ padding:68px 0; }
+  .g-3{ grid-template-columns:1fr; }
+  .hero-stats{ grid-template-columns:repeat(2, 1fr); }
+  .hero-stats .stat{ border-left:0; border-top:1px solid var(--line-dark); }
+  .hero-stats .stat:nth-child(-n+2){ border-top:0; }
+  .strip{ grid-template-columns:1fr; }
+  .strip .arrow{ transform:rotate(90deg); padding:2px 0; }
+  .fin-grid{ grid-template-columns:repeat(2, 1fr); }
+  .promo-grid{ grid-template-columns:1fr; }
+  .mascot-card{ grid-template-columns:1fr; }
+  .mascot-card .seal{ margin:0 auto; }
+  .policy-item{ grid-template-columns:1fr; gap:4px; }
+}
+@media (max-width: 620px){
+  .container{ width:calc(100% - 40px); }
+  .g-2,.g-4,.form-row{ grid-template-columns:1fr; }
+  .tab-list{ width:100%; justify-content:center; }
+  .tab{ padding:9px 15px; font-size:14px; }
+  .tech-grid{ grid-template-columns:1fr; }
+  .sys-grid{ grid-template-columns:1fr; }
+  .footer-grid{ grid-template-columns:1fr; gap:28px; }
+  .modal-card{ padding:28px 22px; }
+  .hero{ padding-bottom:80px; }
+  .card{ padding:22px; }
+  .timeline{ gap:20px; }
+  /* 时间线移动端保持纵向，桌面端横向 */
+  .tl-item{ padding-left:38px; }
+}
+
+/* 桌面端：时间线横向 */
+@media (min-width: 920px){
+  .timeline{ grid-template-columns:repeat(4, 1fr); gap:18px; padding-top:6px; }
+  .timeline::before{ content:""; position:absolute; left:12px; right:12px; top:19px; height:2px; background:var(--c-line-2); }
+  .tl-item{ padding-left:0; padding-top:58px; }
+  .tl-item::before{ display:none; }
+  .tl-dot{ top:8px; }
+}
+
+/* ============ 20. 降级与偏好 ============ */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+  .js [data-reveal]{ opacity:1; transform:none; }
+  .js .hero .a-rise{ opacity:1; transform:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ SVG 图标雪碧图（线性图标，随文字颜色变化） ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 5.5-13.5 14.5-14.5C20.5 12 15 18 7 18H5z"/><path d="M9 16c1.5-3.5 4-6 7.5-7"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.2" r="3.2"/><path d="M3.2 19.6c0-3.2 2.6-5 5.8-5s5.8 1.8 5.8 5"/><circle cx="17" cy="9.2" r="2.3"/><path d="M16.4 14.8c2.6.3 4.4 1.8 4.4 4.4"/></symbol>
+  <symbol id="i-temple" viewBox="0 0 24 24"><path d="M12 3.2 3.5 8.2h17z"/><path d="M5 10.5h14"/><path d="M7.5 12.5v6M12 12.5v6M16.5 12.5v6"/><path d="M4 20.5h16"/></symbol>
+  <symbol id="i-lattice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M4 12h16M12 4v16M6.3 6.3l11.4 11.4M17.7 6.3 6.3 17.7"/></symbol>
+  <symbol id="i-lotus" viewBox="0 0 24 24"><path d="M12 4.5c1.9 2.4 2.9 4.8 2.9 6.9 0 2.9-1.3 4.8-2.9 4.8s-2.9-1.9-2.9-4.8c0-2.1 1-4.5 2.9-6.9z"/><path d="M12 16.2c-2.1 0-4.6-1.5-6.1-4.1 2.1-.5 4.2 0 6.1 4.1z"/><path d="M12 16.2c2.1 0 4.6-1.5 6.1-4.1-2.1-.5-4.2 0-6.1 4.1z"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M3 10c2-2.4 4-2.4 6 0s4 2.4 6 0 4-2.4 6 0"/><path d="M3 15c2-2.4 4-2.4 6 0s4 2.4 6 0 4-2.4 6 0"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h13A1.5 1.5 0 0 1 20 8.5a2.5 2.5 0 0 0 0 5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 15v-1.5a2.5 2.5 0 0 0 0-5z"/><path d="M14 8v2M14 11.5v1.5M14 14.5v1.5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.2 19 6v5.2c0 4.8-2.9 7.7-7 9.6-4.1-1.9-7-4.8-7-9.6V6z"/><path d="M9 12l2.2 2.2L15.4 10"/></symbol>
+  <symbol id="i-screen" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="12" rx="1.5"/><path d="M9 20.5h6M12 16.5v4"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3.5 20.5h17"/><path d="M6.5 20.5v-5.5M11.5 20.5V8M16.5 20.5v-8.5"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="15" rx="1.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.5" y="3" width="11" height="18" rx="2"/><path d="M10.5 18h3"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 7.5 12 13l8.5-5.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5l5 5 10-11"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5.5M6 11.5l6-6 6 6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5l1.7 4.8 4.8 1.7-4.8 1.7L12 16.5l-1.7-4.8-4.8-1.7 4.8-1.7z"/><path d="M18.5 15.5l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="1.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4.5 15 6.5l5.5-2.5v14L15 20.5 9 18.5 3.5 21v-14z"/><path d="M9 4.5v14M15 6.5v14"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 20.5v-6.5"/><path d="M12 14C8 14 5 11 5 7c4 0 7 3 7 7z"/><path d="M12 14c4 0 7-3 7-7-4 0-7 3-7 7z"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><path d="M4.5 9.5h15V20h-15z"/><path d="M4.5 9.5 6 4.5h12l1.5 5"/><path d="M10 20v-5.5h4V20"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M4.5 16v-2.6l2-5.4h11l2 5.4V16"/><path d="M4.5 13.4h15"/><circle cx="8" cy="16.8" r="1.7"/><circle cx="16" cy="16.8" r="1.7"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 7h15M9.5 7V4.5h5V7"/><path d="M6.5 7l1 13h9l1-13"/><path d="M10.5 11v5.5M13.5 11v5.5"/></symbol>
+  <symbol id="i-rock" viewBox="0 0 24 24"><path d="M5 20.5h14l-2-9-5-4-5 4z"/><circle cx="10" cy="13" r="1"/><circle cx="14" cy="15.5" r="1"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H20v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 1 6.5 18H20"/><path d="M9 7.5h7"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 21V3.5"/><path d="M6 4h11l-2.2 4L17 12H6"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18.5h9.5a3.5 3.5 0 0 0 .6-6.95A5.5 5.5 0 0 0 6.6 10.2 4 4 0 0 0 7 18.5z"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="12" cy="13.5" r="3.5"/><path d="M8.5 7 10 4.5h4L15.5 7"/></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7.5v9M9.5 10h5M9.5 13.5h5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 7.8v.2"/></symbol>
+</svg>
+
+<!-- ============ 顶部导航（滚动时由透明转为实色，状态清晰可见） ============ -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#home" data-nav-link aria-label="回到首页">
+      <span class="brand-mark"><svg class="icon"><use href="#i-leaf"/></svg></span>
+      <span class="brand-text"><strong>田园竹坝</strong><small>TIANYUAN ZHUBA</small></span>
+    </a>
+    <nav class="nav-links" aria-label="主导航">
+      <a href="#home" data-nav-link class="is-active">首页</a>
+      <a href="#about" data-nav-link>项目概况</a>
+      <a href="#market" data-nav-link>市场分析</a>
+      <a href="#planning" data-nav-link>规划设计</a>
+      <a href="#ops" data-nav-link>运营模式</a>
+      <a href="#marketing" data-nav-link>营销策略</a>
+      <a href="#invest" data-nav-link>投资分析</a>
+      <a href="#schedule" data-nav-link>实施计划</a>
+      <a href="#contact" data-nav-link>联系我们</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn btn-primary btn-sm" data-modal-open type="button">预约咨询</button>
+      <button class="nav-burger" id="navBurger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="navDrawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 移动端抽屉导航 ============ -->
+<div class="drawer" id="navDrawer">
+  <div class="drawer-mask" data-drawer-close></div>
+  <nav class="drawer-panel" aria-label="移动端导航">
+    <div class="drawer-head">
+      <span class="brand-text"><strong>田园竹坝</strong></span>
+      <button class="modal-close" type="button" data-drawer-close aria-label="关闭菜单" style="position:static">
+        <svg class="icon" style="width:16px;height:16px"><use href="#i-x"/></svg>
+      </button>
+    </div>
+    <a class="d-link" href="#home" data-nav-link>首页</a>
+    <a class="d-link" href="#about" data-nav-link>项目概况</a>
+    <a class="d-link" href="#market" data-nav-link>市场分析</a>
+    <a class="d-link" href="#planning" data-nav-link>规划设计</a>
+    <a class="d-link" href="#ops" data-nav-link>运营模式</a>
+    <a class="d-link" href="#marketing" data-nav-link>营销策略</a>
+    <a class="d-link" href="#invest" data-nav-link>投资分析</a>
+    <a class="d-link" href="#schedule" data-nav-link>实施计划</a>
+    <a class="d-link" href="#contact" data-nav-link>联系我们</a>
+    <button class="btn btn-accent btn-block" type="button" data-modal-open>预约咨询</button>
+  </nav>
+</div>
+
+<main>
+
+<!-- ============ 首屏 ============ -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-pills a-rise" style="--d:.05s">
+      <span class="chip">厦门 · 同安</span>
+      <span class="chip">南洋风情</span>
+      <span class="chip">农文旅融合</span>
+      <span class="chip">前期策划演示</span>
+    </div>
+    <h1 class="a-rise" style="--d:.12s">田园竹坝</h1>
+    <p class="hero-sub a-rise" style="--d:.2s">南洋风情 · 田园文旅综合体</p>
+    <p class="hero-lead a-rise" style="--d:.28s">
+      以乡村振兴为主题，以田园综合体为模型，以全域旅游为抓手，以农文旅结合与运动休闲产业为核心——打造集研学实践、休闲度假、文化体验于一体的归侨南洋旅居目的地。
+    </p>
+    <div class="hero-cta a-rise" style="--d:.36s">
+      <a class="btn btn-primary" href="#about" data-nav-link>了解项目</a>
+      <button class="btn btn-ghost" type="button" data-modal-open>预约参观</button>
+    </div>
+    <div class="hero-stats a-rise" style="--d:.46s" data-reveal>
+      <div class="stat">
+        <div class="stat-num"><span data-count="2.08" data-decimals="2" data-prefix="¥">0</span> 亿</div>
+        <div class="stat-label">项目总投资估算</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><span data-count="24">0</span> 个月</div>
+        <div class="stat-label">开工至预运营周期</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><span data-count="3">0</span> 大片区</div>
+        <div class="stat-label">一核一带 · 区域联动</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><span data-count="12.10" data-decimals="2">0</span>%</div>
+        <div class="stat-label">财务内部收益率</div>
+      </div>
+    </div>
+    <button class="hero-cue a-rise" style="--d:.54s" type="button" aria-label="向下浏览项目概况" data-nav-link-href="#about">
+      <i></i>
+    </button>
+  </div>
+  <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 42C240 78 480 4 720 32 960 60 1200 18 1440 44V80H0V42Z" fill="#F6F3EC"/>
+  </svg>
+</section>
+
+<!-- ============ 01 项目概况 ============ -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <span class="kicker">01 · 项目概况</span>
+      <h2>一核一带，山水之间的归侨原乡</h2>
+      <p>竹坝片区位于厦门市同安区，毗邻北辰山省级风景名胜区，是归侨聚集、南洋风物荟萃的田园腹地。项目由同安区政府与国贸地产集团合作推进，政企协同、双向监管。</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-text" data-reveal>
+        <p><strong>区位与文脉。</strong>片区地处闽南金三角中心，与梵天寺、梅山寺、同安影视城相邻，依托竹坝水库的山水资源与深厚的归侨文化，是厦门近郊少有的「南洋风情 + 田园生态」双重承载地。</p>
+        <p><strong>政企合作。</strong>同安区政府与国贸地产集团就竹坝片区开发签订投资合作协议，片区内政府与企业互相监督管理，为项目品质与推进节奏提供制度保障。</p>
+        <p><strong>一核一带。</strong>以竹坝小镇综合发展核为「一核」，东溪沿线为「一带」，联动后塘、东溪沿线、北辰山三大片区，从单点开发转向区域联动。</p>
+      </div>
+      <div class="grid g-2 stagger">
+        <div class="card" data-reveal>
+          <div class="card-ico"><svg class="icon"><use href="#i-pin"/></svg></div>
+          <h3>区位交通</h3>
+          <p>可进入性良好，人流量大而不堵；专用停车场布局合理，清洁能源园内交通。</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="card-ico"><svg class="icon"><use href="#i-leaf"/></svg></div>
+          <h3>文脉资源</h3>
+          <p>归侨原乡，南洋建筑、南洋美食与节庆文化在此沉淀，是最具辨识度的 IP 素材。</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="card-ico"><svg class="icon"><use href="#i-shield"/></svg></div>
+          <h3>政企协同</h3>
+          <p>区政府与国贸地产签约共治，双向监督管理，开发品质与节奏有保障。</p>
+        </div>
+        <div class="card" data-reveal>
+          <div class="card-ico"><svg class="icon"><use href="#i-sprout"/></svg></div>
+          <h3>生态本底</h3>
+          <p>山水田库俱全，生态系统完整但敏感，建设以低干扰、可持续为前提。</p>
+        </div>
+      </div>
+    </div>
+    <div class="strip" data-reveal>
+      <div class="strip-item">
+        <div class="t">一 核</div>
+        <div class="v">竹坝小镇综合发展核</div>
+        <div class="d">集城市功能外溢衔接、旅游综合服务与乡村振兴示范于一体的活力小镇核心。</div>
+      </div>
+      <div class="arrow">›</div>
+      <div class="strip-item">
+        <div class="t">一 带</div>
+        <div class="v">东溪沿线</div>
+        <div class="d">东溪公园、木栈道与湿地观光道，串联梵天寺、梅山寺、同安影视城。</div>
+      </div>
+      <div class="arrow">›</div>
+      <div class="strip-item">
+        <div class="t">三 片 区</div>
+        <div class="v">后塘 · 东溪 · 北辰山</div>
+        <div class="d">知青水井与果园采摘、东溪公园与古寺、登山观瀑与山地度假，各据特色。</div>
+      </div>
+    </div>
+    <div class="chips-row" data-reveal>
+      <span class="chips-label">周边配套 · 住食医购</span>
+      <span class="chip">栖竹朴舍民宿</span>
+      <span class="chip">印乡山民民宿</span>
+      <span class="chip">巴厘岛美食馆</span>
+      <span class="chip">同安中医院</span>
+      <span class="chip">南洋第一超市</span>
+      <span class="chip">竹坝水库</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 市场分析（页签筛选） ============ -->
+<section class="section section-alt" id="market">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <span class="kicker">02 · 市场分析</span>
+      <h2>大众旅游时代，需求重回增长曲线</h2>
+      <p>从国家政策到鹭岛市场，从客群画像到竞争格局——四张图景，看清竹坝所处的赛道。</p>
+    </div>
+
+    <!-- 页签容器不加 data-reveal：避免隐藏面板内的计数器被提前触发，
+         各面板内容由自身的 data-reveal 在面板激活时按需显现 -->
+    <div data-tabs>
+      <div class="tab-list" role="tablist" aria-label="市场分析视角切换">
+        <span class="tab-ind" aria-hidden="true"></span>
+        <button class="tab is-active" type="button" role="tab" aria-selected="true" data-tab="policy">政策环境</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-tab="xiamen">鹭岛市场</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-tab="persona">客群画像</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-tab="rival">竞争格局</button>
+      </div>
+
+      <!-- 面板：政策环境 -->
+      <div class="tab-panel is-active" data-panel="policy" role="tabpanel">
+        <div class="card" data-reveal>
+          <div class="policy-list">
+            <div class="policy-item">
+              <div class="policy-date">2022.01</div>
+              <div><h4>国务院《"十四五"旅游业发展规划》</h4><p>全面进入大众旅游时代，旅游业发展仍处于重要战略机遇期。</p></div>
+            </div>
+            <div class="policy-item">
+              <div class="policy-date">2022.03</div>
+              <div><h4>文旅部启动文化产业赋能乡村振兴计划</h4><p>以文化赋能旅游产业，发展各具特色的旅游业。</p></div>
+            </div>
+            <div class="policy-item">
+              <div class="policy-date">2022.07</div>
+              <div><h4>乡村民宿发展支持政策</h4><p>民宿成为乡村旅游重要业态，带动乡村经济增长、助力乡村振兴。</p></div>
+            </div>
+            <div class="policy-item">
+              <div class="policy-date">2022.11</div>
+              <div><h4>十四部门：露营旅游休闲指导意见</h4><p>顺应旅游休闲消费体验新需求，扩大优质供给。</p></div>
+            </div>
+            <div class="policy-item">
+              <div class="policy-date">2023.01</div>
+              <div><h4>五部门：文化产业赋能乡村振兴试点</h4><p>通过试点工作形成可推广的赋能路径与模式。</p></div>
+            </div>
+            <div class="policy-item">
+              <div class="policy-date">2023.06</div>
+              <div><h4>文旅部联合中国银行：金融支持乡村旅游</h4><p>加大信贷投放、推进产品创新、开展综合服务。</p></div>
+            </div>
+          </div>
+          <div class="callout">
+            <svg class="icon"><use href="#i-info"/></svg>
+            <p><strong>小结：</strong>政策主线清晰——以文化赋能旅游产业，以旅游带动乡村振兴，同时注重生态保护。竹坝项目正落在政策鼓励的赛道中心。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 面板：鹭岛市场 -->
+      <div class="tab-panel" data-panel="xiamen" role="tabpanel">
+        <div class="grid g-4 stagger">
+          <div class="mini-stat" data-reveal>
+            <div class="num"><span data-count="4838.35" data-decimals="2">0</span><small>万人次</small></div>
+            <div class="lbl">2023 上半年厦门接待游客（同比 +35.99%）</div>
+          </div>
+          <div class="mini-stat" data-reveal>
+            <div class="num"><span data-count="665.38" data-decimals="2" data-prefix="¥">0</span><small>亿元</small></div>
+            <div class="lbl">2023 上半年旅游总收入（同比 +52.51%）</div>
+          </div>
+          <div class="mini-stat" data-reveal>
+            <div class="num"><span data-count="6568.75" data-decimals="2">0</span><small>万人次</small></div>
+            <div class="lbl">2022 全年接待游客（旅游总收入 ¥855.17 亿）</div>
+          </div>
+          <div class="mini-stat" data-reveal>
+            <div class="num"><span data-count="36883" data-prefix="¥">0</span><small>元</small></div>
+            <div class="lbl">2022 全国居民人均可支配收入（同比 +5.0%）</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:20px" data-reveal>
+          <h3><svg class="icon" style="vertical-align:-4px;margin-right:8px;color:var(--c-forest)"><use href="#i-chart"/></svg>三条关键洞察</h3>
+          <ul class="insight-list" style="margin-top:14px">
+            <li><svg class="icon"><use href="#i-check"/></svg><span><strong>强势反弹：</strong>2023 上半年游客量与旅游收入增速均超 35%，市场热度回到增长通道。</span></li>
+            <li><svg class="icon"><use href="#i-check"/></svg><span><strong>过夜为王：</strong>过夜游客同比 +118.0%，远高于一日游的 +8.5%——留客能力决定收入上限。</span></li>
+            <li><svg class="icon"><use href="#i-check"/></svg><span><strong>文化付费：</strong>51.7% 的受访者文化消费占旅游总花费 10%–30%，文化体验成为拉动消费的主要内容。</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 面板：客群画像 -->
+      <div class="tab-panel" data-panel="persona" role="tabpanel">
+        <h3 class="persona-group-title"><span class="tag">主体客户</span>为南洋风情与度假体验而来</h3>
+        <div class="grid g-3 stagger">
+          <div class="card" data-reveal>
+            <div class="card-ico"><svg class="icon"><use href="#i-temple"/></svg></div>
+            <h3>异国文化体验者</h3>
+            <p>南洋会馆展示南洋地区的文化遗产与历史风貌；东南亚华侨聚居也带来天然的文化亲近感。</p>
+          </div>
+          <div class="card" data-reveal>
+            <div class="card-ico"><svg class="icon"><use href="#i-users"/></svg></div>
+            <h3>亲子游家庭</h3>
+            <p>独特风情加上娱乐游玩场所，家长与孩子在旅途中共同体验异国文化与田园野趣。</p>
+          </div>
+          <div class="card" data-reveal>
+            <div class="card-ico"><svg class="icon"><use href="#i-spark"/></svg></div>
+            <h3>青少年与大学生</h3>
+            <p>景区门票收费亲民，南洋风情街小吃与「音乐戏水狂欢节」对年轻客群吸引力强。</p>
+          </div>
+        </div>
+        <h3 class="persona-group-title" style="margin-top:30px"><span class="tag">客体客户</span>顺路而来的增量客流</h3>
+        <div class="grid g-2 stagger">
+          <div class="card" data-reveal>
+            <div class="card-ico"><svg class="icon"><use href="#i-leaf"/></svg></div>
+            <h3>山水观光客</h3>
+            <p>北辰山景区为竹坝引流，乐于游山玩水的游客在登山途中可顺道体验南洋风情。</p>
+          </div>
+          <div class="card" data-reveal>
+            <div class="card-ico"><svg class="icon"><use href="#i-wave"/></svg></div>
+            <h3>垂钓游客</h3>
+            <p>前往竹坝水库垂钓的旅客，可就近在景区内住宿，并体验园内丰富的娱乐项目。</p>
+          </div>
+        </div>
+        <div class="chips-row" data-reveal>
+          <span class="chips-label">出行诉求关键词</span>
+          <span class="chip">调节身心</span>
+          <span class="chip">轻松快乐</span>
+          <span class="chip">探索新鲜事物</span>
+          <span class="chip">独特艺术文化氛围</span>
+          <span class="chip">00 后新生力量</span>
+        </div>
+      </div>
+
+      <!-- 面板：竞争格局 -->
+      <div class="tab-panel" data-panel="rival" role="tabpanel">
+        <div class="grid g-2 stagger">
+          <div class="card" data-reveal>
+            <div class="card-ico"><svg class="icon"><use href="#i-map"/></svg></div>
+            <h3>区域竞合</h3>
+            <p>东南亚风情度假村（竹坝南洋会馆二期）等周边项目正在建设，与竹坝共同做大南洋风情的区域客流基本盘。</p>
+          </div>
+          <div class="card" data-reveal>
+            <div class="card-ico" style="background:rgba(192,90,46,.1);color:var(--c-terra)"><svg class="icon"><use href="#i-target"/></svg></div>
+            <h3>差异化机会</h3>
+            <p>片区「有南洋建筑、南洋美食，但不够集中、不够突出」——竹坝的机会在于集中打造归侨南洋文化 IP。</p>
+          </div>
+        </div>
+        <div class="callout" data-reveal>
+          <svg class="icon"><use href="#i-info"/></svg>
+          <p><strong>结论：</strong>不做同质化的「南洋元素堆砌」，以「一核一带」整合三大片区资源，从单点竞争转向区域联动，把客流变成留客。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 规划设计（风格筛选） ============ -->
+<section class="section" id="planning">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <span class="kicker">03 · 规划设计</span>
+      <h2>三国风情，落位 A / B 两地块</h2>
+      <p>地块 A 以泰式民宿与水上乐园承接度假与亲水需求；地块 B 以「南洋会馆二期」集中呈现泰、马、印三国文化体验。建筑风格可按下方标签筛选查看。</p>
+    </div>
+
+    <div class="filter-bar" data-filter data-reveal>
+      <button class="chip is-active" type="button" data-filter-btn="all">全部风格</button>
+      <button class="chip" type="button" data-filter-btn="thailand">泰国</button>
+      <button class="chip" type="button" data-filter-btn="malaysia">马来西亚</button>
+      <button class="chip" type="button" data-filter-btn="indonesia">印度尼西亚</button>
+      <span class="filter-count">共 <b data-filter-count>3</b> 种建筑风格</span>
+    </div>
+
+    <div class="grid g-3" data-filter-list data-reveal>
+      <!-- 泰国 -->
+      <article class="card style-card" data-cat="thailand">
+        <div class="scene">
+          <svg viewBox="0 0 320 170" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%" aria-label="泰式建筑示意">
+            <rect width="320" height="170" fill="#F0ECE1"/>
+            <circle cx="258" cy="42" r="24" fill="#C89B3C" opacity=".85"/>
+            <path d="M160 34 92 82h136z" fill="#2F6B4A"/>
+            <path d="M104 88h112v10H104z" fill="#24563C"/>
+            <path d="M120 102v42M160 102v42M200 102v42" stroke="#2F6B4A" stroke-width="9" stroke-linecap="round"/>
+            <path d="M96 148h128" stroke="#16221B" stroke-width="7" stroke-linecap="round"/>
+            <path d="M40 148v-30M52 118l-12-14M40 148l-14 8" stroke="#C05A2E" stroke-width="5" stroke-linecap="round"/>
+            <path d="M280 148v-30M268 118l12-14M280 148l14 8" stroke="#C05A2E" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="body">
+          <h3><svg class="icon"><use href="#i-temple"/></svg>泰国风格</h3>
+          <p>宗教色彩浓厚的佛国气质。特色尖屋顶勾勒天际线，装饰流露神秘宗教色彩，与热带风情交融。</p>
+          <div class="tags"><span class="tag">尖屋顶</span><span class="tag">佛教元素</span><span class="tag">热带气息</span></div>
+        </div>
+      </article>
+      <!-- 马来西亚 -->
+      <article class="card style-card" data-cat="malaysia">
+        <div class="scene">
+          <svg viewBox="0 0 320 170" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%" aria-label="马来西亚风格示意">
+            <rect width="320" height="170" fill="#F0ECE1"/>
+            <g stroke="#2F6B4A" stroke-width="4" opacity=".9">
+              <rect x="70" y="30" width="110" height="110" fill="none"/>
+              <path d="M70 85h110M125 30v110"/>
+              <path d="M70 30l110 110M180 30 70 140" stroke="#C89B3C"/>
+            </g>
+            <rect x="200" y="52" width="56" height="56" rx="6" fill="#C05A2E"/>
+            <path d="M228 68v24M216 80h24" stroke="#F6F3EC" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="52" cy="52" r="10" fill="#C89B3C"/>
+            <circle cx="268" cy="122" r="10" fill="#C89B3C"/>
+          </svg>
+        </div>
+        <div class="body">
+          <h3><svg class="icon"><use href="#i-lattice"/></svg>马来西亚风格</h3>
+          <p>自由随意的空间构成。色彩饱和的装饰品依采光角度与面积合理布置，打破传统空间布局的局限。</p>
+          <div class="tags"><span class="tag">饱和色彩</span><span class="tag">自由布局</span><span class="tag">采光适配</span></div>
+        </div>
+      </article>
+      <!-- 印度尼西亚 -->
+      <article class="card style-card" data-cat="indonesia">
+        <div class="scene">
+          <svg viewBox="0 0 320 170" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%" aria-label="印度尼西亚风格示意">
+            <rect width="320" height="170" fill="#F0ECE1"/>
+            <g fill="#2F6B4A">
+              <path d="M160 34c9 12 14 24 14 34 0 14-6 24-14 24s-14-10-14-24c0-10 5-22 14-34z"/>
+              <path d="M160 92c-10 0-23-8-30-21 10-2 21 0 30 21z" opacity=".75"/>
+              <path d="M160 92c10 0 23-8 30-21-10-2-21 0-30 21z" opacity=".75"/>
+            </g>
+            <path d="M118 128c14-10 30-10 42 0s28 10 42 0" stroke="#C89B3C" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <circle cx="70" cy="46" r="8" fill="#C05A2E"/>
+            <circle cx="250" cy="46" r="8" fill="#C05A2E"/>
+            <path d="M64 138h192" stroke="#16221B" stroke-width="5" stroke-linecap="round" opacity=".25"/>
+          </svg>
+        </div>
+        <div class="body">
+          <h3><svg class="icon"><use href="#i-lotus"/></svg>印度尼西亚风格</h3>
+          <p>就地取材的宗教神话叙事。大象、菩提树、莲花等图案源于宗教神话，家具多用藤材与河道水草。</p>
+          <div class="tags"><span class="tag">宗教图案</span><span class="tag">藤编家具</span><span class="tag">自然材质</span></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="grid g-2" style="margin-top:20px">
+      <article class="card plot-card a" data-reveal>
+        <div class="plot-head">
+          <svg class="icon"><use href="#i-leaf"/></svg>
+          <h3>地块 A · 泰韵度假</h3>
+          <span>民宿 + 水上乐园</span>
+        </div>
+        <div class="plot-body">
+          <p>泰国风大型民宿与水上乐园落位于地块 A。民宿设计充分结合当地文化与环境，植被多种植热带植物；水上乐园含多种类型水滑道，并配套完整的安全体系。</p>
+          <ul>
+            <li><svg class="icon"><use href="#i-check"/></svg>泰式民宿群 · 独立物业管理</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>多种水滑道矩阵</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>安全标识、护栏与紧急疏散路线</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>定期设施巡检与应急预案</li>
+          </ul>
+        </div>
+      </article>
+      <article class="card plot-card b" data-reveal>
+        <div class="plot-head">
+          <svg class="icon"><use href="#i-temple"/></svg>
+          <h3>地块 B · 南洋会馆二期</h3>
+          <span>三国风情体验区</span>
+        </div>
+        <div class="plot-body">
+          <p>三国风情体验区落位于地块 B。泰、马、印三个民俗体验中心各据一层主题，每馆三层：一层为特色美食餐厅与特产店铺，二层与三层承载文化体验与展陈。</p>
+          <ul>
+            <li><svg class="icon"><use href="#i-check"/></svg>泰 / 马 / 印三国体验馆</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>一层美食特产店铺</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>沉浸式异国氛围营造</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>餐饮、便利店等商业配套</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <div class="tech-strip" data-reveal>
+      <div class="tech-head">
+        <svg class="icon"><use href="#i-spark"/></svg>
+        <h3>新兴技术 · 金属雕花复合板</h3>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-item"><b>保温隔热</b><span>芯材为高密度聚氨酯发泡，耐寒隔热，降低采暖和制冷能耗。</span></div>
+        <div class="tech-item"><b>安装便捷</b><span>拆装灵活、不受季节气候限制，缩短工程周期、节约成本。</span></div>
+        <div class="tech-item"><b>轻质耐震</b><span>质量轻、强度高，降低建筑负担与地震影响，耐冲击防开裂。</span></div>
+        <div class="tech-item"><b>隔音环保</b><span>密闭气泡结构隔音降噪；无辐射无污染，可拆卸重复利用。</span></div>
+      </div>
+      <p class="note" style="margin-top:14px">另有百余种浮雕花纹与色彩组合可供贴面装饰，兼顾美观、工期与造价。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 运营模式（手风琴） ============ -->
+<section class="section section-alt" id="ops">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <span class="kicker">04 · 运营模式</span>
+      <h2>四大模式，运营一个目的地</h2>
+      <p>从景区深度提升、文旅产业融合，到区域联动与产业集群——四种模式相互嵌套，支撑长期运营。</p>
+    </div>
+
+    <div data-accordion data-reveal>
+      <div class="acc-item is-open">
+        <button class="acc-head" type="button" aria-expanded="true">
+          <span class="acc-idx">01</span>
+          <span class="acc-title">景区为核，内修外拓 —— 深度提升发展模式</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </button>
+        <div class="acc-panel"><div class="acc-body">
+          针对资源优势突出、辐射带动力强的核心景区，以原有景区为核心，内部进行项目业态丰富升级，提高大景区综合承载力；外部同步扩张，串联北辰山等周边资源。农业侧多方向发展休闲农业、观光农业与农耕体验，让游客在旅游中感受乡村风情。
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="acc-idx">02</span>
+          <span class="acc-title">文化为魂，产业为体 —— 文旅产业综合体模式</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </button>
+        <div class="acc-panel"><div class="acc-body">
+          以丰富的历史遗存、人文景观和独特的自然美景为依托，不断创新丰富文化旅游产品，融合地域文化、历史文化与自然文化。每年定期举办特色文化花车巡游、音乐泼水节和归侨故事舞台剧等活动，让文化成为消费的入口、复购的理由。
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="acc-idx">03</span>
+          <span class="acc-title">多核吸引，整合提升 —— 区域联动发展模式</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </button>
+        <div class="acc-panel"><div class="acc-body">
+          景区分为后塘、东溪沿线、北辰山三大片区，各据特色：后塘可观 1964 年知青水井、果园采摘；东溪沿线有公园、木栈道、湿地与古寺；北辰山可登山观景、游水观光并配套度假设施。游客在每个片区获得差异化体验。
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="acc-idx">04</span>
+          <span class="acc-title">产业联动，集群发展 —— 泛旅游产业整合模式</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </button>
+        <div class="acc-panel"><div class="acc-body">
+          针对地缘相近、资源共享的区域，以项目为核心，通过整合手段联动周边酒店、餐厅、商业与交通资源，多集群互动建设综合景区，共享客流与配套，摊薄营销与服务成本。
+        </div></div>
+      </div>
+    </div>
+
+    <h3 style="font-family:var(--f-serif);font-size:22px;color:var(--c-ink);margin:44px 0 20px" data-reveal>智慧景区 · 四大系统</h3>
+    <div class="sys-grid stagger">
+      <div class="sys-card" data-reveal>
+        <svg class="icon"><use href="#i-camera"/></svg>
+        <h4>监控系统</h4>
+        <p>监控中心为园区控制中枢，掌脉识别进入，支持多屏协同与超大分辨率显示。</p>
+      </div>
+      <div class="sys-card" data-reveal>
+        <svg class="icon"><use href="#i-coin"/></svg>
+        <h4>消费系统</h4>
+        <p>掌脉 / 微信 / 支付宝统一支付、统一报表结算；当前掌脉支付占比约 38%。</p>
+      </div>
+      <div class="sys-card" data-reveal>
+        <svg class="icon"><use href="#i-cloud"/></svg>
+        <h4>气象监测</h4>
+        <p>风速风向、PM2.5、温湿度、噪音、负氧离子实时采集，经发布屏向游客公开。</p>
+      </div>
+      <div class="sys-card" data-reveal>
+        <svg class="icon"><use href="#i-screen"/></svg>
+        <h4>信息发布</h4>
+        <p>智慧云平台联动全园信息渠道，实时 / 定时推送与广告统一管理。</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:var(--f-serif);font-size:22px;color:var(--c-ink);margin:44px 0 20px" data-reveal>十大业态</h3>
+    <div class="chips-row" data-reveal>
+      <span class="chip"><svg class="icon" style="width:15px;height:15px;color:var(--c-forest)"><use href="#i-leaf"/></svg>独栋别墅民宿</span>
+      <span class="chip"><svg class="icon" style="width:15px;height:15px;color:var(--c-forest)"><use href="#i-store"/></svg>公寓式民宿</span>
+      <span class="chip"><svg class="icon" style="width:15px;height:15px;color:var(--c-forest)"><use href="#i-wave"/></svg>水上乐园</span>
+      <span class="chip"><svg class="icon" style="width:15px;height:15px;color:var(--c-forest)"><use href="#i-sprout"/></svg>农场体验园</span>
+      <span class="chip"><svg class="icon" style="width:15px;height:15px;color:var(--c-forest)"><use href="#i-temple"/></svg>异国文化体验馆</span>
+      <span class="chip"><svg class="icon" style="width:15px;height:15px;color:var(--c-forest)"><use href="#i-store"/></svg>南洋店铺</span>
+      <span class="chip"><svg class="icon" style="width:15px;height:15px;color:var(--c-forest)"><use href="#i-rock"/></svg>石雕文化</span>
+      <span class="chip"><svg class="icon" style="width:15px;height:15px;color:var(--c-forest)"><use href="#i-car"/></svg>共享电动车 · 单车</span>
+      <span class="chip"><svg class="icon" style="width:15px;height:15px;color:var(--c-forest)"><use href="#i-target"/></svg>生态停车场</span>
+      <span class="chip"><svg class="icon" style="width:15px;height:15px;color:var(--c-forest)"><use href="#i-trash"/></svg>垃圾分类站</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 营销策略 ============ -->
+<section class="section" id="marketing">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <span class="kicker">05 · 营销策略</span>
+      <h2>八大卖点，四类渠道，全域触达</h2>
+      <p>以「低开高走」的价格策略进入市场，用差异化产品承接不同客群，用全渠道矩阵放大声量。</p>
+    </div>
+
+    <div class="grid g-4 stagger">
+      <div class="card sell-card" data-reveal>
+        <div class="card-ico"><svg class="icon"><use href="#i-shield"/></svg></div>
+        <h3>政企合作</h3><p>区政府与国贸地产签约共治，双向监管，品质有保障。</p>
+      </div>
+      <div class="card sell-card" data-reveal>
+        <div class="card-ico"><svg class="icon"><use href="#i-lotus"/></svg></div>
+        <h3>南洋风情</h3><p>南洋建筑与风情文化体验中心，沉浸式东南亚街区。</p>
+      </div>
+      <div class="card sell-card" data-reveal>
+        <div class="card-ico"><svg class="icon"><use href="#i-leaf"/></svg></div>
+        <h3>山水环境</h3><p>山水资源丰富、空气清新，修身养性的度假本底。</p>
+      </div>
+      <div class="card sell-card" data-reveal>
+        <div class="card-ico"><svg class="icon"><use href="#i-sprout"/></svg></div>
+        <h3>农业多向</h3><p>生产性农业为重心，休闲与观赏农业协同发展。</p>
+      </div>
+      <div class="card sell-card" data-reveal>
+        <div class="card-ico"><svg class="icon"><use href="#i-map"/></svg></div>
+        <h3>一核一带</h3><p>小镇发展核加东溪带，三大片区游玩便利。</p>
+      </div>
+      <div class="card sell-card" data-reveal>
+        <div class="card-ico"><svg class="icon"><use href="#i-screen"/></svg></div>
+        <h3>智慧服务</h3><p>门票二维码与小程序，游前游中游后一码通行。</p>
+      </div>
+      <div class="card sell-card" data-reveal>
+        <div class="card-ico"><svg class="icon"><use href="#i-users"/></svg></div>
+        <h3>互利共赢</h3><p>农业多元发展带动居民增收，同时丰富游客体验。</p>
+      </div>
+      <div class="card sell-card" data-reveal>
+        <div class="card-ico"><svg class="icon"><use href="#i-spark"/></svg></div>
+        <h3>异国节庆</h3><p>同步泰国泼水节，一个月「归侨文化节」营造南洋氛围。</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:var(--f-serif);font-size:22px;color:var(--c-ink);margin:48px 0 20px" data-reveal>渠道策略 · A / B / C / D</h3>
+    <div class="grid g-4 stagger">
+      <div class="card channel-card" data-reveal>
+        <span class="badge">A</span>
+        <h3>区域总代理</h3>
+        <p>区域市场独家总代模式，适合新开景区——借代理商资源与人脉迅速铺开渠道。</p>
+      </div>
+      <div class="card channel-card" data-reveal>
+        <span class="badge">B</span>
+        <h3>平台机构代理</h3>
+        <p>在目标区域筛选优质平台机构合作，弥补单一代理无法全覆盖的市场盲区。</p>
+      </div>
+      <div class="card channel-card" data-reveal>
+        <span class="badge">C</span>
+        <h3>OTA 线上平台</h3>
+        <p>入驻携程、同程、驴妈妈等成熟分销平台，借平台流量实现规模转化。</p>
+      </div>
+      <div class="card channel-card" data-reveal>
+        <span class="badge">D</span>
+        <h3>自建分销</h3>
+        <p>同行分销、网红达人、全民分销与小程序私域商城，账目可查、工具齐全。</p>
+      </div>
+    </div>
+
+    <div class="grid g-2" style="margin-top:20px">
+      <div class="grid" style="gap:20px">
+        <h3 style="font-family:var(--f-serif);font-size:22px;color:var(--c-ink);margin:28px 0 0" data-reveal>价格策略</h3>
+        <div class="grid g-2 stagger">
+          <div class="card" data-reveal><h3>低开高走</h3><p>以震撼价进入市场吸引观众、积聚人气，随后按一定增幅抬价至目标区间。</p></div>
+          <div class="card" data-reveal><h3>差异化定价</h3><p>分季节、分套餐、成人 / 儿童分票；旺旺季动态调价，不过分哄抬。</p></div>
+          <div class="card" data-reveal><h3>打包销售</h3><p>门票与特产、餐饮组合成套餐，团体客户定向优惠，降低总体价格。</p></div>
+          <div class="card" data-reveal><h3>联合营销</h3><p>与旅行社共担营销成本、共享门票收益，共同做大区域客流。</p></div>
+        </div>
+      </div>
+      <div class="promo-grid" style="grid-template-columns:1fr">
+        <h3 style="font-family:var(--f-serif);font-size:22px;color:var(--c-ink);margin:28px 0 0" data-reveal>推广策划</h3>
+        <div class="card promo-card" data-reveal>
+          <div class="card-ico"><svg class="icon"><use href="#i-screen"/></svg></div>
+          <h3>线上推广</h3>
+          <ul>
+            <li><svg class="icon"><use href="#i-check"/></svg>抖音、火山等短视频平台内容矩阵，放大传播速度与声量</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>观看量与时长领先的电视频道、热门剧集片头广告投放</li>
+          </ul>
+        </div>
+        <div class="card promo-card" data-reveal>
+          <div class="card-ico"><svg class="icon"><use href="#i-store"/></svg></div>
+          <h3>线下推广</h3>
+          <ul>
+            <li><svg class="icon"><use href="#i-check"/></svg>景区公众号与二维码，快速传递景区信息</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>厦门市区客流大的商场中心醒目广告位</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>同安及厦门新闻报刊、杂志广告栏</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>公交站台、地铁站台广告；人流主干道传单加吉祥物公仔派发</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mascot-card" style="margin-top:20px" data-reveal>
+      <div>
+        <h3 style="margin-top:0">项目吉祥物</h3>
+        <p>吉祥物整体以竹坝特色南洋稻为头发，头部结合东南亚佛教民俗文化采用佛头造型，身披袈裟、手拿稻谷——一头一尾，串起「田间的稻」与「归侨的根」。</p>
+        <div class="chips-row" style="margin-top:0">
+          <span class="chips-label">年度节庆</span>
+          <span class="chip">音乐泼水节</span>
+          <span class="chip">归侨文化节（为期一个月）</span>
+          <span class="chip">特色文化花车巡游</span>
+          <span class="chip">归侨故事舞台剧</span>
+        </div>
+      </div>
+      <div class="seal" aria-hidden="true">竹坝</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 投资分析 ============ -->
+<section class="section section-alt" id="invest">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <span class="kicker">06 · 投资分析</span>
+      <h2>一笔算得清的长期账</h2>
+      <p>投资估算、资金筹措、财务指标与风险敏感性——核心数据均引自策划书，滚动至此自动呈现。</p>
+    </div>
+
+    <div class="grid g-3 stagger" style="margin-bottom:20px">
+      <div class="mini-stat" data-reveal>
+        <div class="num">¥<span data-count="20611.49" data-decimals="2">0</span><small>万元</small></div>
+        <div class="lbl">项目投资总额概算</div>
+      </div>
+      <div class="mini-stat" data-reveal>
+        <div class="num">¥<span data-count="20811.49" data-decimals="2">0</span><small>万元</small></div>
+        <div class="lbl">项目总投资估算</div>
+      </div>
+      <div class="mini-stat" data-reveal>
+        <div class="num">¥<span data-count="19405.56" data-decimals="2">0</span><small>万元</small></div>
+        <div class="lbl">工程建设总投资</div>
+      </div>
+    </div>
+
+    <div class="grid g-2" style="align-items:stretch">
+      <div class="bars-panel" data-reveal>
+        <h3><svg class="icon"><use href="#i-coin"/></svg>资金筹措结构</h3>
+        <div class="bar-row">
+          <div class="bar-top"><b>银行贷款</b><span>10,000 万元</span><i>48.1%</i></div>
+          <div class="bar-track"><div class="bar-fill c-forest" data-bar style="--w:48.1%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><b>自筹资金及招商引资</b><span>10,811.49 万元</span><i>51.9%</i></div>
+          <div class="bar-track"><div class="bar-fill c-terra" data-bar style="--w:51.9%"></div></div>
+        </div>
+        <p class="note" style="margin-top:16px">资金来源由银行贷款、社会融资及招商三部分构成，合计 20,811.49 万元。</p>
+      </div>
+      <div class="bars-panel" data-reveal>
+        <h3><svg class="icon"><use href="#i-chart"/></svg>敏感性排序（示意）</h3>
+        <div class="bar-row">
+          <div class="bar-top"><b>成本费用</b><span>最敏感</span><i>高</i></div>
+          <div class="bar-track"><div class="bar-fill c-ink" data-bar style="--w:100%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><b>固定资产投资</b><span>次敏感</span><i>中</i></div>
+          <div class="bar-track"><div class="bar-fill c-gold" data-bar style="--w:72%"></div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-top"><b>营业收入</b><span>相对不敏感</span><i>较低</i></div>
+          <div class="bar-track"><div class="bar-fill c-forest" data-bar style="--w:46%"></div></div>
+        </div>
+        <p class="note" style="margin-top:16px">各因素在 ±10% 范围内波动对收益的影响排序；条长为定性示意，精确数值以策划书敏感性分析表为准。</p>
+      </div>
+    </div>
+
+    <div class="fin-grid stagger" style="margin-top:20px">
+      <div class="fin-item" data-reveal><div class="num"><span data-count="7.7" data-decimals="1">0</span><small> 年</small></div><div class="lbl">静态投资回收期（含三年建设期）</div></div>
+      <div class="fin-item" data-reveal><div class="num"><span data-count="11.8" data-decimals="1">0</span><small> 年</small></div><div class="lbl">动态投资回收期（基准折现率 10%）</div></div>
+      <div class="fin-item" data-reveal><div class="num"><span data-count="17.01" data-decimals="2">0</span><small>%</small></div><div class="lbl">投资利润率</div></div>
+      <div class="fin-item" data-reveal><div class="num"><span data-count="19.32" data-decimals="2">0</span><small>%</small></div><div class="lbl">投资利税率</div></div>
+      <div class="fin-item hl" data-reveal><div class="num"><span data-count="12.10" data-decimals="2">0</span><small>%</small></div><div class="lbl">内部收益率（插值法）</div></div>
+      <div class="fin-item" data-reveal><div class="num" style="font-size:21px;padding-top:4px">2027–2030</div><div class="lbl">快速收益增长期，2035 年后趋稳</div></div>
+    </div>
+
+    <h3 style="font-family:var(--f-serif);font-size:22px;color:var(--c-ink);margin:48px 0 20px" data-reveal>风险与对策</h3>
+    <div data-accordion data-reveal>
+      <div class="acc-item">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="acc-idx">R1</span>
+          <span class="acc-title">市场风险</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </button>
+        <div class="acc-panel"><div class="acc-body">
+          需求波动、行业竞争与品牌形象是三大主要市场风险。<strong>对策：</strong>根据市场需求制定合理价格策略、优化产品结构；加强核心竞争力建设，以差异化避免同质竞争；加强品牌建设与客户关系管理，提升顾客满意度与回头率。
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="acc-idx">R2</span>
+          <span class="acc-title">政策风险</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </button>
+        <div class="acc-panel"><div class="acc-body">
+          国家宏观政策与厦门市有关规定影响资金来源与流向、居民收入与消费方式、以及国有旅游资源的经营管理方式。<strong>对策：</strong>紧跟政策窗口期推进融资与招商，产品设计预留弹性，合规经营、顺势而为。
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="acc-idx">R3</span>
+          <span class="acc-title">旅游安全管理风险</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </button>
+        <div class="acc-panel"><div class="acc-body">
+          安全事故多源于预防不到位、制度不健全与游客安全意识不足。<strong>对策：</strong>强化安全管理理念与制度建设；加强安全培训教育；强化与旅游管理部门合作分担风险；建设企业安全文化，防患于未然。
+        </div></div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-head" type="button" aria-expanded="false">
+          <span class="acc-idx">R4</span>
+          <span class="acc-title">生态维护与建设风险</span>
+          <span class="acc-icon" aria-hidden="true"></span>
+        </button>
+        <div class="acc-panel"><div class="acc-body">
+          原生生态系统较敏感脆弱，建设内容多、周期短、专业接口多。<strong>对策：</strong>合理布局建筑、最大限度降低干扰；加强生态环境监测与预警，建立监测网络与风险评估机制；成立联合项目建设管理机构，统筹多专业协同。
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 实施计划 ============ -->
+<section class="section" id="schedule">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <span class="kicker">07 · 实施计划</span>
+      <h2>三年建设，今夏预运营</h2>
+      <p>2024 年 8 月开工，2026 年 4 月竣工，2026 年 8 月左右实现预运营，并在旅游旺季转入正式运营，确保后期资金链运作。</p>
+    </div>
+    <ol class="timeline" data-reveal>
+      <li class="tl-item is-done">
+        <span class="tl-dot"><svg class="icon"><use href="#i-check"/></svg></span>
+        <div class="tl-card">
+          <span class="tl-state">已完成</span>
+          <h3>2024.08.01 · 项目开工</h3>
+          <p>前期工作计划与报建流程就绪，工程正式启动。</p>
+        </div>
+      </li>
+      <li class="tl-item is-done">
+        <span class="tl-dot"><svg class="icon"><use href="#i-check"/></svg></span>
+        <div class="tl-card">
+          <span class="tl-state">已完成</span>
+          <h3>2026.04.01 · 工程竣工</h3>
+          <p>建设内容完成，具备预运营条件。</p>
+        </div>
+      </li>
+      <li class="tl-item is-doing">
+        <span class="tl-dot"><svg class="icon"><use href="#i-spark"/></svg></span>
+        <div class="tl-card">
+          <span class="tl-state">进行中</span>
+          <h3>2026.08 · 预运营启动</h3>
+          <p>旅游旺季投入试运营，验证客流模型与服务体系。</p>
+        </div>
+      </li>
+      <li class="tl-item is-todo">
+        <span class="tl-dot"><svg class="icon"><use href="#i-flag"/></svg></span>
+        <div class="tl-card">
+          <span class="tl-state">规划中</span>
+          <h3>旺季到来 · 正式运营</h3>
+          <p>全面运营；2027–2030 进入快速收益增长期，2035 年后趋于稳定。</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 08 联系我们（暗色 + 表单） ============ -->
+<section class="section section-dark" id="contact">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <span class="kicker">08 · 联系我们</span>
+      <h2>留下意向，共赴田园</h2>
+      <p>项目考察、商务合作、民宿预订或文化体验咨询——填写下方表单，我们将在一个工作日内与您联系。</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info" data-reveal>
+        <div class="fact">
+          <svg class="icon"><use href="#i-pin"/></svg>
+          <div><b>项目招商中心</b><span>厦门市同安区竹坝片区</span></div>
+        </div>
+        <div class="fact">
+          <svg class="icon"><use href="#i-map"/></svg>
+          <div><b>三大联动片区</b><span>后塘 · 东溪沿线 · 北辰山风景名胜区</span></div>
+        </div>
+        <div class="fact">
+          <svg class="icon"><use href="#i-ticket"/></svg>
+          <div><b>意向类型</b><span>项目考察 / 商务合作 / 民宿预订 / 文化体验咨询</span></div>
+        </div>
+        <div class="fact">
+          <svg class="icon"><use href="#i-calendar"/></svg>
+          <div><b>响应时效</b><span>提交后 1 个工作日内专人回访</span></div>
+        </div>
+        <div class="chips-row">
+          <span class="chips-label">周边资源</span>
+          <span class="chip">北辰山</span>
+          <span class="chip">梵天寺</span>
+          <span class="chip">同安影视城</span>
+          <span class="chip">竹坝水库</span>
+        </div>
+        <div style="margin-top:26px">
+          <button class="btn btn-ghost btn-sm" type="button" id="copyBtn"
+                  data-copy="田园竹坝：以乡村振兴为主题、以田园综合体为模型、以全域旅游为抓手的南洋风情田园文旅综合体。">
+            <svg class="icon" style="width:16px;height:16px"><use href="#i-copy"/></svg>复制项目定位
+          </button>
+        </div>
+      </div>
+
+      <div data-reveal>
+        <!-- 意向登记表单 -->
+        <form class="form" id="intentForm" novalidate>
+          <div class="form-row">
+            <div class="field">
+              <label for="f-name">姓名<span class="req">*</span></label>
+              <input id="f-name" name="name" type="text" placeholder="您的称呼" autocomplete="name" maxlength="20">
+              <p class="field-msg"></p>
+            </div>
+            <div class="field">
+              <label for="f-phone">手机号<span class="req">*</span></label>
+              <input id="f-phone" name="phone" type="tel" placeholder="11 位手机号" autocomplete="tel" maxlength="11" inputmode="numeric">
+              <p class="field-msg"></p>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="f-email">邮箱（选填）</label>
+              <input id="f-email" name="email" type="email" placeholder="用于接收项目资料" autocomplete="email">
+              <p class="field-msg"></p>
+            </div>
+            <div class="field sel">
+              <label for="f-intent">意向类型<span class="req">*</span></label>
+              <select id="f-intent" name="intent">
+                <option value="">请选择</option>
+                <option value="inspect">项目考察</option>
+                <option value="coop">商务合作</option>
+                <option value="stay">民宿预订</option>
+                <option value="culture">文化体验咨询</option>
+              </select>
+              <p class="field-msg"></p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-msg">备注（选填）</label>
+            <textarea id="f-msg" name="message" placeholder="想了解的内容、期望的考察时间等" maxlength="200"></textarea>
+            <div class="ta-foot"><span class="field-msg"></span><span id="taCount">0/200</span></div>
+          </div>
+          <div class="form-foot">
+            <button class="btn btn-accent" type="submit" id="submitBtn">
+              <span class="spin" aria-hidden="true"></span><span class="btn-txt">提交意向</span>
+            </button>
+            <p class="note">演示站点：提交仅在本地模拟，不会发送真实请求。</p>
+          </div>
+        </form>
+
+        <!-- 提交成功面板 -->
+        <div class="form-success" id="formSuccess" hidden>
+          <div class="ok"><svg class="icon"><use href="#i-check"/></svg></div>
+          <h3>已收到您的意向</h3>
+          <p>感谢 <strong id="successName">您</strong>，我们已记录您的「<strong id="successIntent">项目考察</strong>」意向，工作人员将在 1 个工作日内与您联系。</p>
+          <button class="btn btn-ghost" type="button" id="againBtn">再次登记</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ 页脚 ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="#home" data-nav-link>
+          <span class="brand-mark"><svg class="icon"><use href="#i-leaf"/></svg></span>
+          <span class="brand-text"><strong>田园竹坝</strong><small>TIANYUAN ZHUBA</small></span>
+        </a>
+        <p class="footer-desc">南洋风情田园文旅综合体。内容整理自《厦门田园竹坝项目前期策划书》，本页面为策划演示用途。</p>
+      </div>
+      <div>
+        <h4>栏目导航</h4>
+        <div class="footer-links">
+          <a href="#about" data-nav-link>项目概况</a>
+          <a href="#market" data-nav-link>市场分析</a>
+          <a href="#planning" data-nav-link>规划设计</a>
+          <a href="#ops" data-nav-link>运营模式</a>
+          <a href="#marketing" data-nav-link>营销策略</a>
+          <a href="#invest" data-nav-link>投资分析</a>
+        </div>
+      </div>
+      <div>
+        <h4>项目资料</h4>
+        <div class="footer-links">
+          <a href="#schedule" data-nav-link>实施计划</a>
+          <a href="#contact" data-nav-link>意向登记</a>
+          <a href="#market" data-nav-link>政策与市场数据</a>
+          <a href="#invest" data-nav-link>投资与财务指标</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 田园竹坝项目组 · 策划团队「什么都队」</span>
+      <span class="spacer"></span>
+      <button class="gray-btn" type="button" id="grayToggle" aria-pressed="false">
+        <span class="dot" aria-hidden="true"></span>灰度预览：<b id="grayState">关</b>
+      </button>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ 预约咨询弹窗 ============ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+  <div class="modal-mask" data-modal-close></div>
+  <div class="modal-card">
+    <button class="modal-close" type="button" data-modal-close aria-label="关闭弹窗">
+      <svg class="icon" style="width:15px;height:15px"><use href="#i-x"/></svg>
+    </button>
+    <span class="kicker">项目咨询</span>
+    <h3 id="modalTitle">预约参观 · 商务合作</h3>
+    <p class="modal-lead">田园竹坝已进入预运营阶段，欢迎项目考察与合作洽谈。留下意向，我们将第一时间与您联系。</p>
+    <ul class="modal-facts">
+      <li><svg class="icon"><use href="#i-pin"/></svg>项目地点：厦门市同安区竹坝片区</li>
+      <li><svg class="icon"><use href="#i-calendar"/></svg>当前阶段：预运营（2026.08 起）</li>
+      <li><svg class="icon"><use href="#i-users"/></svg>适配意向：考察 / 合作 / 预订 / 咨询</li>
+    </ul>
+    <div class="modal-actions">
+      <button class="btn btn-accent" type="button" data-modal-goto>前往意向登记</button>
+      <button class="btn btn-ghost" type="button" data-modal-close>稍后再说</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast 通知容器 -->
+<div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+<!-- 回到顶部 -->
+<button class="back-top" id="backTop" type="button" aria-label="回到顶部">
+  <svg class="icon"><use href="#i-arrow-up"/></svg>
+</button>
+
+<noscript>
+  <div style="padding:14px 20px;background:#C05A2E;color:#fff;text-align:center;font-size:14px">
+    当前浏览器已禁用 JavaScript，页签切换、内容筛选、弹窗与表单提交等交互将不可用。
+  </div>
+</noscript>
+
+<script>
+/* =====================================================================
+   JavaScript · 全部为原生实现，零依赖
+   模块：导航 / 抽屉 / 页签 / 筛选 / 手风琴 / 数字滚动 / 条形图 /
+        滚动显现 / 弹窗 / 表单校验与提交 / Toast / 灰度预览 / 回到顶部
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  /* 标记 JS 可用（用于启用入场动画，禁用 JS 时内容直接可见） */
+  document.documentElement.classList.add('js');
+
+  /* ---------- 0. 工具 ---------- */
+  var $  = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  var REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  /* ---------- 1. 导航：滚动态 + Scrollspy + 平滑滚动 ---------- */
+  var nav = $('#nav');
+  var navH = function () { return nav.offsetHeight; };
+
+  function onScrollNav() { nav.classList.toggle('is-scrolled', window.scrollY > 8); }
+  window.addEventListener('scroll', onScrollNav, { passive: true });
+  onScrollNav();
+
+  /* Scrollspy：section 穿过视口中部窄带时高亮对应导航项 */
+  var spyLinks = $$('.nav-links a[data-nav-link], .drawer-panel a[data-nav-link]');
+  if ('IntersectionObserver' in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var id = '#' + en.target.id;
+        spyLinks.forEach(function (l) { l.classList.toggle('is-active', l.getAttribute('href') === id); });
+      });
+    }, { rootMargin: '-38% 0px -55% 0px', threshold: 0 });
+    $$('main section[id]').forEach(function (s) { spy.observe(s); });
+  }
+
+  /* 自定义缓动平滑滚动（兼容各平台，含旧版 iOS） */
+  var scrollAnim = 0;
+  function smoothScrollTo(to, duration) {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    to = Math.max(0, Math.min(to, max));
+    if (REDUCED || !duration) { window.scrollTo(0, to); return; }
+    var from = window.scrollY, dist = to - from, start = null;
+    if (scrollAnim) cancelAnimationFrame(scrollAnim);
+    function step(ts) {
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / duration);
+      var e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; /* easeInOutCubic */
+      window.scrollTo(0, from + dist * e);
+      if (p < 1) scrollAnim = requestAnimationFrame(step);
+    }
+    scrollAnim = requestAnimationFrame(step);
+  }
+  function scrollToEl(el) {
+    smoothScrollTo(el.getBoundingClientRect().top + window.scrollY - navH() + 2, REDUCED ? 0 : 620);
+  }
+
+  /* 统一处理站内锚点跳转（导航 / 页脚 / 首屏 CTA / 滚动提示） */
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[data-nav-link]');
+    var href = null;
+    if (link) {
+      href = link.getAttribute('href');
+    } else if (e.target.closest('[data-nav-link-href]')) {
+      href = e.target.closest('[data-nav-link-href]').getAttribute('data-nav-link-href');
+    }
+    if (!href || href.charAt(0) !== '#') return;
+    var target = $(href);
+    if (!target) return;
+    e.preventDefault();
+    closeDrawer();
+    scrollToEl(target);
+  });
+
+  /* ---------- 2. 移动端抽屉 ---------- */
+  var drawer = $('#navDrawer'), burger = $('#navBurger');
+  function openDrawer() {
+    drawer.classList.add('is-open');
+    burger.classList.add('is-open');
+    burger.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('no-scroll');
+  }
+  function closeDrawer() {
+    drawer.classList.remove('is-open');
+    burger.classList.remove('is-open');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('no-scroll');
+  }
+  burger.addEventListener('click', function () {
+    drawer.classList.contains('is-open') ? closeDrawer() : openDrawer();
+  });
+  $$('[data-drawer-close]').forEach(function (el) { el.addEventListener('click', closeDrawer); });
+
+  /* ---------- 3. 通用页签（含滑动指示条 + 键盘方向键） ---------- */
+  $$('[data-tabs]').forEach(function (root) {
+    var tabs = $$('.tab', root);
+    var ind = $('.tab-ind', root);
+    var panels = $$('.tab-panel', root);
+
+    function moveInd(btn) {
+      if (!ind || !btn) return;
+      ind.style.width = btn.offsetWidth + 'px';
+      ind.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
+    }
+    function activate(btn) {
+      tabs.forEach(function (t) {
+        var on = t === btn;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      panels.forEach(function (p) {
+        var on = p.getAttribute('data-panel') === btn.getAttribute('data-tab');
+        p.classList.toggle('is-active', on);
+        if (on) { p.style.animation = 'none'; void p.offsetWidth; p.style.animation = ''; }
+      });
+      moveInd(btn);
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { activate(t); });
+      t.addEventListener('keydown', function (e) {
+        var n = null;
+        if (e.key === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+        if (e.key === 'ArrowLeft')  n = tabs[(i - 1 + tabs.length) % tabs.length];
+        if (n) { e.preventDefault(); n.focus(); activate(n); }
+      });
+    });
+    var first = $('.tab.is-active', root) || tabs[0];
+    if (first) requestAnimationFrame(function () { moveInd(first); });
+    window.addEventListener('resize', function () { moveInd($('.tab.is-active', root)); });
+  });
+
+  /* ---------- 4. 通用筛选（风格卡片） ---------- */
+  $$('[data-filter]').forEach(function (root) {
+    var btns = $$('[data-filter-btn]', root);
+    var list = $('[data-filter-list]', root);
+    var items = $$('[data-cat]', list);
+    var countEl = $('[data-filter-count]', root);
+
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var f = btn.getAttribute('data-filter-btn');
+        btns.forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+        var shown = 0;
+        items.forEach(function (item) {
+          var show = f === 'all' || item.getAttribute('data-cat') === f;
+          item.classList.toggle('is-hidden', !show);
+          if (show) {
+            shown++;
+            /* 重新触发挥位动画，形成平滑的出现过渡 */
+            item.style.animation = 'none'; void item.offsetWidth;
+            item.style.animation = 'fadeUp .5s var(--ease) both';
+            item.style.animationDelay = (shown % 4) * 60 + 'ms';
+          }
+        });
+        if (countEl) countEl.textContent = shown;
+      });
+    });
+  });
+
+  /* ---------- 5. 手风琴（单开模式 + 平滑展开） ---------- */
+  $$('[data-accordion]').forEach(function (root) {
+    var items = $$('.acc-item', root);
+
+    function setItem(item, open) {
+      var head = $('.acc-head', item), panel = $('.acc-panel', item);
+      item.classList.toggle('is-open', open);
+      head.setAttribute('aria-expanded', open ? 'true' : 'false');
+      panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0px';
+    }
+    /* 初始化：默认展开的项 */
+    items.forEach(function (item) {
+      if (item.classList.contains('is-open')) setItem(item, true);
+      var head = $('.acc-head', item);
+      head.addEventListener('click', function () {
+        var willOpen = !item.classList.contains('is-open');
+        items.forEach(function (it) { setItem(it, false); });
+        if (willOpen) setItem(item, true);
+      });
+    });
+    /* 视口变化时重算已展开面板高度 */
+    var rt;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(function () {
+        items.forEach(function (it) { if (it.classList.contains('is-open')) setItem(it, true); });
+      }, 120);
+    });
+  });
+
+  /* ---------- 6. 数字滚动 ---------- */
+  function animateCount(el) {
+    var target = parseFloat(el.getAttribute('data-count'));
+    if (isNaN(target)) return;
+    var dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var pre = el.getAttribute('data-prefix') || '';
+    var suf = el.getAttribute('data-suffix') || '';
+    function fmt(v) {
+      var s = v.toFixed(dec).split('.');
+      s[0] = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return pre + s.join('.') + suf;
+    }
+    if (REDUCED) { el.textContent = fmt(target); return; }
+    var dur = 1300, start = null;
+    function step(ts) {
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / dur);
+      var e = 1 - Math.pow(1 - p, 3); /* easeOutCubic */
+      el.textContent = fmt(target * e);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- 7. 滚动显现 + 图表触发 ---------- */
+  if ('IntersectionObserver' in window) {
+    var revealIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        el.classList.add('in');
+        $$('[data-count]', el).forEach(animateCount);
+        $$('[data-bar]', el).forEach(function (b) { b.classList.add('grown'); });
+        revealIO.unobserve(el);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+    $$('[data-reveal]').forEach(function (el) { revealIO.observe(el); });
+  } else {
+    $$('[data-reveal]').forEach(function (el) { el.classList.add('in'); });
+    $$('[data-count]').forEach(animateCount);
+    $$('[data-bar]').forEach(function (b) { b.classList.add('grown'); });
+  }
+  /* 网格内卡片错峰入场 */
+  $$('.stagger').forEach(function (g) {
+    $$('[data-reveal]', g).forEach(function (el, i) { el.style.transitionDelay = (i % 4) * 80 + 'ms'; });
+  });
+  /* 安全网：3.5s 后无条件展示全部内容（防止观察器异常导致内容不可见） */
+  setTimeout(function () {
+    $$('[data-reveal]').forEach(function (el) { el.classList.add('in'); });
+  }, 3500);
+  /* Hero 入场 */
+  window.addEventListener('load', function () { $('.hero').classList.add('is-loaded'); });
+
+  /* ---------- 8. 弹窗 ---------- */
+  var modal = $('#modal'), lastFocus = null;
+  function openModal() {
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    document.body.classList.add('no-scroll');
+    requestAnimationFrame(function () { modal.classList.add('is-open'); });
+    var f = $('.modal-card button, .modal-card a', modal);
+    if (f) f.focus();
+  }
+  function closeModal() {
+    modal.classList.remove('is-open');
+    document.body.classList.remove('no-scroll');
+    setTimeout(function () { modal.hidden = true; }, 300);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  $$('[data-modal-open]').forEach(function (b) { b.addEventListener('click', openModal); });
+  $$('[data-modal-close]').forEach(function (b) { b.addEventListener('click', closeModal); });
+
+  /* ESC 关闭；Tab 焦点锁在弹窗内 */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (!modal.hidden) closeModal();
+      closeDrawer();
+    }
+    if (e.key === 'Tab' && !modal.hidden) {
+      var f = $$('button, [href], input, select, textarea', modal)
+        .filter(function (el) { return !el.disabled && el.offsetParent !== null; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* 弹窗 → 跳转意向登记并预填「项目考察」 */
+  $('[data-modal-goto]').addEventListener('click', function () {
+    closeModal();
+    setTimeout(function () {
+      scrollToEl($('#contact'));
+      var form = $('#intentForm');
+      var sel = form.elements.intent;
+      if (sel) { sel.value = 'inspect'; setError(sel, ''); }
+      setTimeout(function () { form.elements.name.focus(); }, 520);
+      toast('已定位到意向登记表，意向类型已选「项目考察」', 'info');
+    }, 260);
+  });
+
+  /* ---------- 9. Toast ---------- */
+  function toast(msg, type) {
+    var wrap = $('#toastWrap');
+    var el = document.createElement('div');
+    el.className = 'toast' + (type ? ' is-' + type : '');
+    var icon = type === 'error' ? '#i-x' : (type === 'info' ? '#i-info' : '#i-check');
+    el.innerHTML = '<svg class="icon"><use href="' + icon + '"/></svg><span></span>';
+    el.querySelector('span').textContent = msg;
+    wrap.appendChild(el);
+    while (wrap.children.length > 3) wrap.removeChild(wrap.firstElementChild);
+    requestAnimationFrame(function () { el.classList.add('is-show'); });
+    setTimeout(function () {
+      el.classList.remove('is-show');
+      setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 400);
+    }, 3400);
+  }
+
+  /* ---------- 10. 表单校验与提交 ---------- */
+  var form = $('#intentForm');
+  var rules = {
+    name:  function (v) { return v.trim().length >= 2 ? '' : '请填写至少 2 个字符的姓名'; },
+    phone: function (v) { return /^1[3-9]\d{9}$/.test(v.trim()) ? '' : '请填写 11 位大陆手机号'; },
+    email: function (v) { return !v.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? '' : '邮箱格式不正确'; },
+    intent:function (v) { return v ? '' : '请选择意向类型'; }
+  };
+  function fieldOf(el) { return el.closest('.field'); }
+  function setError(el, msg) {
+    var f = fieldOf(el);
+    if (!f) return;
+    f.classList.toggle('is-invalid', !!msg);
+    el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    var m = $('.field-msg', f);
+    if (m) m.textContent = msg || '';
+  }
+  function validateField(el) {
+    var rule = rules[el.name];
+    if (!rule) return true;
+    var msg = rule(el.value);
+    setError(el, msg);
+    return !msg;
+  }
+  /* 校验时机：提交时全量校验；输入时实时清除已标错的字段；下拉变更时即时校验。
+     注意：不做 blur 校验——错误提示插入会改变布局高度，导致「聚焦字段后点击提交」
+     时按钮在 mousedown 与 mouseup 之间位移、click 丢失（需点两次才能提交）。 */
+  $$('input, select, textarea', form).forEach(function (el) {
+    el.addEventListener('input', function () {
+      if (fieldOf(el).classList.contains('is-invalid')) validateField(el);
+    });
+    el.addEventListener('change', function () { validateField(el); });
+  });
+
+  /* 备注字数统计 */
+  var ta = form.elements.message, taCount = $('#taCount');
+  if (ta && taCount) {
+    ta.addEventListener('input', function () { taCount.textContent = ta.value.length + '/200'; });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var ok = true, firstBad = null;
+    $$('input, select, textarea', form).forEach(function (el) {
+      if (!validateField(el)) { ok = false; if (!firstBad) firstBad = el; }
+    });
+    if (!ok) {
+      if (firstBad) firstBad.focus();
+      form.classList.remove('shake'); void form.offsetWidth; form.classList.add('shake');
+      toast('还有必填项未通过校验，请检查标红项', 'error');
+      return;
+    }
+    /* 模拟异步提交：加载态 → 成功态 */
+    var btn = $('#submitBtn');
+    btn.classList.add('is-loading');
+    btn.disabled = true;
+    $('.btn-txt', btn).textContent = '提交中…';
+    setTimeout(function () {
+      btn.classList.remove('is-loading');
+      btn.disabled = false;
+      $('.btn-txt', btn).textContent = '提交意向';
+      var name = form.elements.name.value.trim();
+      var intent = form.elements.intent.options[form.elements.intent.selectedIndex].text;
+      $('#successName').textContent = name;
+      $('#successIntent').textContent = intent;
+      form.hidden = true;
+      var done = $('#formSuccess');
+      done.hidden = false;
+      toast('提交成功，我们将尽快与您联系', 'success');
+      done.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'center' });
+    }, 950);
+  });
+
+  /* 再次登记：重置表单 */
+  $('#againBtn').addEventListener('click', function () {
+    form.reset();
+    $$('.field', form).forEach(function (f) { f.classList.remove('is-invalid'); });
+    if (taCount) taCount.textContent = '0/200';
+    $('#formSuccess').hidden = true;
+    form.hidden = false;
+    form.elements.name.focus();
+  });
+
+  /* ---------- 11. 复制项目定位 ---------- */
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+    return new Promise(function (res, rej) {
+      var t = document.createElement('textarea');
+      t.value = text;
+      t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); res(); } catch (err) { rej(err); }
+      document.body.removeChild(t);
+    });
+  }
+  $('#copyBtn').addEventListener('click', function () {
+    copyText(this.getAttribute('data-copy'))
+      .then(function () { toast('项目定位语已复制到剪贴板', 'success'); })
+      .catch(function () { toast('复制失败，请手动选择文本复制', 'error'); });
+  });
+
+  /* ---------- 12. 灰度预览（验证三级明暗对比） ---------- */
+  var grayBtn = $('#grayToggle');
+  grayBtn.addEventListener('click', function () {
+    var on = document.documentElement.classList.toggle('is-gray');
+    grayBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    $('#grayState').textContent = on ? '开' : '关';
+    toast(on ? '已开启灰度预览：暗 / 中 / 亮三个层级依然清晰' : '已关闭灰度预览', 'info');
+  });
+
+  /* ---------- 13. 回到顶部 ---------- */
+  var backTop = $('#backTop');
+  window.addEventListener('scroll', function () {
+    backTop.classList.toggle('is-show', window.scrollY > 560);
+  }, { passive: true });
+  backTop.addEventListener('click', function () { smoothScrollTo(0, REDUCED ? 0 : 600); });
+
+})();
+</script>
+</body>
+</html>
